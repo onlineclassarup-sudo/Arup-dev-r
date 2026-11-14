@@ -16,82 +16,89 @@ function makeCanvas(width: number, height: number, draw: (ctx: CanvasRenderingCo
 }
 
 /**
- * 1. Face Texture - Exact Authentic "Gol Sundor" (Rounded & Beautiful)
- * - Beautiful warm fair skin (#fae0cb)
- * - Perfectly curved, deep rounded U-smile mouth ("গোল সুন্দর")
- * - Single iconic sharp white fang on upper left
- * - Deep ruby interior with smooth round pink tongue
- * - Bold anime squint eyes (< and >) with cute top lashes
+ * 1. Face Texture - High-End Kawaii Anime Expression (Pure Transparent Canvas)
+ * - Transparent background (lets smooth 3D curved skin shine through!)
+ * - Soft radial cheek blush
+ * - Cute arched anime eyebrows
+ * - Bold anime squint laughing eyes (< and >) with sweet curved lashes
+ * - Beautiful, clean curved laughing mouth with single sharp white fang & pink tongue
  * - Centered vertical talisman note: "DO NOT TOUCH MY LOVE" with top tape
- * - Soft round blush on both cheeks
  */
 export function createFaceTexture(): THREE.CanvasTexture | null {
   return makeCanvas(512, 512, (ctx) => {
-    // 1. Base skin tone
-    ctx.fillStyle = '#fae0cb';
-    ctx.fillRect(0, 0, 512, 512);
+    // 1. Transparent background (No flat square skin blocking the 3D curved head!)
+    ctx.clearRect(0, 0, 512, 512);
 
-    // Soft round blush on cheeks ("গোল সুন্দর")
-    const blushL = ctx.createRadialGradient(140, 335, 4, 140, 335, 44);
-    blushL.addColorStop(0, 'rgba(255, 130, 140, 0.45)');
-    blushL.addColorStop(1, 'rgba(255, 130, 140, 0)');
+    // 2. Soft, glowing peach-pink cheek blush
+    const blushL = ctx.createRadialGradient(138, 332, 4, 138, 332, 46);
+    blushL.addColorStop(0, 'rgba(255, 115, 135, 0.48)');
+    blushL.addColorStop(0.6, 'rgba(255, 135, 150, 0.22)');
+    blushL.addColorStop(1, 'rgba(255, 140, 150, 0)');
     ctx.fillStyle = blushL;
     ctx.beginPath();
-    ctx.arc(140, 335, 44, 0, Math.PI * 2);
+    ctx.arc(138, 332, 46, 0, Math.PI * 2);
     ctx.fill();
 
-    const blushR = ctx.createRadialGradient(372, 335, 4, 372, 335, 44);
-    blushR.addColorStop(0, 'rgba(255, 130, 140, 0.45)');
-    blushR.addColorStop(1, 'rgba(255, 130, 140, 0)');
+    const blushR = ctx.createRadialGradient(374, 332, 4, 374, 332, 46);
+    blushR.addColorStop(0, 'rgba(255, 115, 135, 0.48)');
+    blushR.addColorStop(0.6, 'rgba(255, 135, 150, 0.22)');
+    blushR.addColorStop(1, 'rgba(255, 140, 150, 0)');
     ctx.fillStyle = blushR;
     ctx.beginPath();
-    ctx.arc(372, 335, 44, 0, Math.PI * 2);
+    ctx.arc(374, 332, 46, 0, Math.PI * 2);
     ctx.fill();
 
     // -------------------------------------------------------------
-    // 2. Forehead Talisman / Paper Tag ("DO NOT TOUCH MY LOVE")
-    // Centered neatly between the eyes
+    // 3. Forehead Talisman / Paper Tag ("DO NOT TOUCH MY LOVE")
+    // Hanging cleanly from the hairline down between the eyes
     // -------------------------------------------------------------
     ctx.save();
     const tagX = 256;
-    const tagY = 195;
-    const tagW = 98;
-    const tagH = 148;
+    const tagY = 192;
+    const tagW = 96;
+    const tagH = 146;
 
-    // Subtle drop shadow
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.16)';
-    ctx.fillRect(tagX - tagW / 2 + 3, tagY - tagH / 2 + 3, tagW, tagH);
+    // Drop shadow behind paper
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+    ctx.beginPath();
+    ctx.roundRect(tagX - tagW / 2 + 3, tagY - tagH / 2 + 3, tagW, tagH, 3);
+    ctx.fill();
 
-    // White paper slip
+    // Pure crisp white paper
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(tagX - tagW / 2, tagY - tagH / 2, tagW, tagH);
+    ctx.beginPath();
+    ctx.roundRect(tagX - tagW / 2, tagY - tagH / 2, tagW, tagH, 2);
+    ctx.fill();
 
-    // Fine dark inner border
+    // Elegant inner border
     ctx.strokeStyle = '#18181b';
     ctx.lineWidth = 2.5;
-    ctx.strokeRect(tagX - tagW / 2 + 2, tagY - tagH / 2 + 2, tagW - 4, tagH - 4);
+    ctx.strokeRect(tagX - tagW / 2 + 3, tagY - tagH / 2 + 3, tagW - 6, tagH - 6);
 
-    // Jagged / torn bottom edge detail
-    ctx.fillStyle = '#fae0cb'; // cuts into paper bottom
+    // Jagged / torn bottom edge
+    ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+    ctx.clearRect(tagX - tagW / 2 - 2, tagY + tagH / 2 - 4, tagW + 4, 10);
+    // Redraw jagged bottom teeth of paper
+    ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.moveTo(tagX - tagW / 2 - 2, tagY + tagH / 2);
-    ctx.lineTo(tagX - tagW / 4, tagY + tagH / 2 - 5);
-    ctx.lineTo(tagX, tagY + tagH / 2);
-    ctx.lineTo(tagX + tagW / 4, tagY + tagH / 2 - 5);
-    ctx.lineTo(tagX + tagW / 2 + 2, tagY + tagH / 2);
-    ctx.lineTo(tagX + tagW / 2 + 2, tagY + tagH / 2 + 10);
-    ctx.lineTo(tagX - tagW / 2 - 2, tagY + tagH / 2 + 10);
+    ctx.moveTo(tagX - tagW / 2, tagY + tagH / 2 - 4);
+    ctx.lineTo(tagX - tagW / 4, tagY + tagH / 2 - 9);
+    ctx.lineTo(tagX, tagY + tagH / 2 - 3);
+    ctx.lineTo(tagX + tagW / 4, tagY + tagH / 2 - 8);
+    ctx.lineTo(tagX + tagW / 2, tagY + tagH / 2 - 4);
+    ctx.lineTo(tagX + tagW / 2, tagY + tagH / 2 - 12);
+    ctx.lineTo(tagX - tagW / 2, tagY + tagH / 2 - 12);
     ctx.closePath();
     ctx.fill();
 
-    // Semi-translucent tape at the top
-    ctx.fillStyle = 'rgba(235, 230, 220, 0.9)';
-    ctx.fillRect(tagX - 20, tagY - tagH / 2 - 12, 40, 20);
-    ctx.strokeStyle = 'rgba(180, 170, 155, 0.6)';
+    // Semi-translucent adhesive tape on top
+    ctx.fillStyle = 'rgba(240, 235, 220, 0.88)';
+    ctx.fillRect(tagX - 20, tagY - tagH / 2 - 14, 40, 22);
+    ctx.strokeStyle = 'rgba(180, 170, 150, 0.6)';
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(tagX - 20, tagY - tagH / 2 - 12, 40, 20);
+    ctx.strokeRect(tagX - 20, tagY - tagH / 2 - 14, 40, 22);
 
-    // Text on talisman: "DO NOT TOUCH MY LOVE"
+    // Typography on Talisman
     ctx.fillStyle = '#0f172a';
     ctx.textAlign = 'center';
     ctx.font = '900 15px "Arial Black", Impact, sans-serif';
@@ -105,120 +112,142 @@ export function createFaceTexture(): THREE.CanvasTexture | null {
     ctx.font = '900 15px "Arial Black", Impact, sans-serif';
     ctx.fillText('LOVE', tagX, tagY + 34);
 
-    // Bottom seal / barcode lines
+    // Talisman barcode / mystic lines at bottom
     ctx.fillStyle = '#334155';
-    for (let bx = tagX - 32; bx <= tagX + 32; bx += 7) {
+    for (let bx = tagX - 30; bx <= tagX + 30; bx += 7) {
       const bw = bx % 14 === 0 ? 3.5 : 2;
-      ctx.fillRect(bx, tagY + 50, bw, 10);
+      ctx.fillRect(bx, tagY + 48, bw, 9);
     }
-
     ctx.restore();
 
     // -------------------------------------------------------------
-    // 3. Anime Squinting Eyes
-    // Bold, clean lines pointing outward (< on left, > on right)
+    // 4. Cute Anime Eyebrows
     // -------------------------------------------------------------
-    ctx.strokeStyle = '#111111';
+    ctx.strokeStyle = '#2b1b11';
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+
+    // Left eyebrow (playful angle)
+    ctx.beginPath();
+    ctx.moveTo(132, 244);
+    ctx.quadraticCurveTo(158, 235, 186, 246);
+    ctx.stroke();
+
+    // Right eyebrow (playful angle)
+    ctx.beginPath();
+    ctx.moveTo(326, 246);
+    ctx.quadraticCurveTo(354, 235, 380, 244);
+    ctx.stroke();
+
+    // -------------------------------------------------------------
+    // 5. Anime Squint Laughing Eyes
+    // Crisp, bold, gorgeous < and >
+    // -------------------------------------------------------------
+    ctx.strokeStyle = '#181513';
+    ctx.lineWidth = 14;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
     // Left Eye (< pointing outward left)
-    ctx.lineWidth = 15;
     ctx.beginPath();
-    ctx.moveTo(192, 268);
-    ctx.lineTo(122, 285);
-    ctx.lineTo(186, 308);
+    ctx.moveTo(194, 270);
+    ctx.lineTo(124, 286);
+    ctx.lineTo(188, 308);
     ctx.stroke();
 
-    // Left eye cute top lash
-    ctx.lineWidth = 7;
+    // Left eye cute double lashes
+    ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.moveTo(144, 280);
     ctx.lineTo(132, 264);
+    ctx.moveTo(160, 274);
+    ctx.lineTo(152, 260);
     ctx.stroke();
 
     // Right Eye (> pointing outward right)
-    ctx.lineWidth = 15;
+    ctx.lineWidth = 14;
     ctx.beginPath();
-    ctx.moveTo(320, 268);
-    ctx.lineTo(390, 285);
-    ctx.lineTo(326, 308);
+    ctx.moveTo(318, 270);
+    ctx.lineTo(388, 286);
+    ctx.lineTo(324, 308);
     ctx.stroke();
 
-    // Right eye cute top lash
-    ctx.lineWidth = 7;
+    // Right eye cute double lashes
+    ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.moveTo(368, 280);
     ctx.lineTo(380, 264);
+    ctx.moveTo(352, 274);
+    ctx.lineTo(360, 260);
     ctx.stroke();
 
     // -------------------------------------------------------------
-    // 4. "GOL SUNDOR" ROUND CHEERFUL MOUTH WITH SINGLE FANG
-    // Beautiful, perfectly rounded U-smile cavity (গোল সুন্দর)
+    // 6. Beautiful Kawaii Laughing Mouth with Cute White Fang
+    // Smooth, deep, perfectly rounded cheerful smile ("গোল সুন্দর")
     // -------------------------------------------------------------
     ctx.save();
-    ctx.beginPath();
-
-    const mouthL = 188;
-    const mouthR = 328;
+    const mouthL = 190;
+    const mouthR = 326;
     const mouthTopY = 346;
     const mouthBottomY = 432;
     const mouthMidX = 258;
 
-    // Top lip: starts left (188, 348), slight gentle arch, rises slightly to (328, 342)
+    ctx.beginPath();
+    // Top lip: gentle dip and sweet curve
     ctx.moveTo(mouthL, mouthTopY + 2);
-    ctx.quadraticCurveTo(mouthMidX, mouthTopY - 4, mouthR, mouthTopY - 4);
-
-    // Bottom lip: Perfectly rounded, deep U-smile curve down to (258, 432)
-    ctx.bezierCurveTo(mouthR + 6, mouthBottomY, mouthL - 6, mouthBottomY, mouthL, mouthTopY + 2);
+    ctx.quadraticCurveTo(mouthMidX, mouthTopY - 5, mouthR, mouthTopY - 3);
+    // Bottom lip: Perfectly rounded deep U-smile
+    ctx.bezierCurveTo(mouthR + 8, mouthBottomY, mouthL - 8, mouthBottomY, mouthL, mouthTopY + 2);
     ctx.closePath();
 
-    // Deep vibrant red / ruby cavity
+    // Vibrant deep ruby interior
     ctx.fillStyle = '#b91c1c';
     ctx.fill();
 
-    // Clip inside mouth to draw tongue & fang
+    // Clip inside mouth to draw tongue & fang cleanly
     ctx.clip();
 
-    // Round cute pink tongue at bottom of mouth ("গোল সুন্দর")
+    // Round cute pastel-pink tongue
     ctx.fillStyle = '#fb7185';
     ctx.beginPath();
-    ctx.arc(mouthMidX, mouthBottomY - 14, 46, 0, Math.PI * 2);
+    ctx.arc(mouthMidX, mouthBottomY - 12, 48, 0, Math.PI * 2);
     ctx.fill();
 
-    // Single Sharp White Vampire / Anime Fang on Upper Left!
+    // Single Sharp White Anime Fang on Upper Left!
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.moveTo(202, mouthTopY - 2);
-    ctx.lineTo(214, mouthTopY + 30); // sharp downward tip
-    ctx.lineTo(228, mouthTopY - 2);
+    ctx.moveTo(204, mouthTopY - 3);
+    ctx.lineTo(216, mouthTopY + 28); // clean downward tip
+    ctx.lineTo(230, mouthTopY - 3);
     ctx.closePath();
     ctx.fill();
 
-    // Fang dark outline
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 4;
+    // Fang delicate outline
+    ctx.strokeStyle = '#181513';
+    ctx.lineWidth = 3.5;
     ctx.stroke();
 
     ctx.restore();
 
-    // Outer bold mouth outline - smooth, thick & rounded!
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 11;
+    // Bold mouth outline with smooth round corners
+    ctx.strokeStyle = '#181513';
+    ctx.lineWidth = 10;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
     ctx.moveTo(mouthL, mouthTopY + 2);
-    ctx.quadraticCurveTo(mouthMidX, mouthTopY - 4, mouthR, mouthTopY - 4);
-    ctx.bezierCurveTo(mouthR + 6, mouthBottomY, mouthL - 6, mouthBottomY, mouthL, mouthTopY + 2);
+    ctx.quadraticCurveTo(mouthMidX, mouthTopY - 5, mouthR, mouthTopY - 3);
+    ctx.bezierCurveTo(mouthR + 8, mouthBottomY, mouthL - 8, mouthBottomY, mouthL, mouthTopY + 2);
     ctx.closePath();
     ctx.stroke();
 
-    // Cheerful smile corner tick on right
+    // Cheerful smile corner ticks
     ctx.lineWidth = 6;
     ctx.beginPath();
-    ctx.moveTo(mouthR, mouthTopY - 4);
-    ctx.lineTo(mouthR + 10, mouthTopY - 12);
+    ctx.moveTo(mouthL, mouthTopY + 2);
+    ctx.lineTo(mouthL - 8, mouthTopY - 6);
+    ctx.moveTo(mouthR, mouthTopY - 3);
+    ctx.lineTo(mouthR + 9, mouthTopY - 11);
     ctx.stroke();
   });
 }

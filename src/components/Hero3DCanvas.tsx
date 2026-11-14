@@ -337,80 +337,64 @@ function RobloxDeveloperAvatar({
           <cylinderGeometry args={[0.3, 0.3, 0.15, 16]} />
         </mesh>
 
-        {/* Front Face Texture (Anime > < laughing eyes, single fang mouth, DO NOT TOUCH MY LOVE talisman) */}
+        {/* Front Face Features (Kawaii > < Eyes, Single Fang Smirk, DO NOT TOUCH MY LOVE Talisman) */}
         {faceTexture && (
-          <mesh position={[0, 0, 0.526]}>
-            <planeGeometry args={[1.02, 0.98]} />
-            <meshStandardMaterial map={faceTexture} transparent roughness={0.4} />
+          <mesh position={[0, 0, 0.525]}>
+            <planeGeometry args={[0.98, 0.95]} />
+            <meshStandardMaterial
+              map={faceTexture}
+              transparent
+              roughness={0.3}
+              alphaTest={0.01}
+              depthWrite={false}
+            />
           </mesh>
         )}
 
         {/* ------------------------------------------------------------- */}
-        {/* Layered Chocolate Brown Anime Hair (Smooth Rounded Volume)     */}
+        {/* Layered Chocolate Brown Anime Hair (Clean, Beautiful Framing)  */}
         {/* ------------------------------------------------------------- */}
-        {/* Main top & side hair volume cap (rounded & natural) */}
-        <mesh position={[0, 0.32, -0.04]}>
-          <RoundedBox args={[1.14, 0.68, 1.16]} radius={0.16} smoothness={8} material={hairMaterial} />
+        {/* Main top & side hair volume cap */}
+        <mesh position={[0, 0.34, -0.04]}>
+          <RoundedBox args={[1.14, 0.65, 1.14]} radius={0.18} smoothness={8} material={hairMaterial} />
         </mesh>
-        <mesh position={[0, 0.54, -0.02]}>
-          <RoundedBox args={[0.96, 0.28, 0.98]} radius={0.12} smoothness={8} material={hairHighlightMaterial} />
-        </mesh>
-
-        {/* Hair Back Layers (reaching down towards nape of neck) */}
-        <mesh position={[0, -0.14, -0.56]} material={hairMaterial}>
-          <boxGeometry args={[1.12, 0.82, 0.22]} />
-        </mesh>
-        <mesh position={[0, -0.38, -0.54]} material={hairHighlightMaterial}>
-          <boxGeometry args={[1.02, 0.44, 0.18]} />
+        <mesh position={[0, 0.55, -0.02]}>
+          <RoundedBox args={[0.96, 0.26, 0.96]} radius={0.12} smoothness={8} material={hairHighlightMaterial} />
         </mesh>
 
-        {/* Left Side Hair Locks (framing face cheeks) */}
-        <mesh position={[-0.58, 0.02, 0.05]} material={hairMaterial}>
-          <boxGeometry args={[0.16, 0.95, 1.08]} />
+        {/* Hair Back Layers */}
+        <mesh position={[0, -0.14, -0.56]}>
+          <RoundedBox args={[1.12, 0.82, 0.22]} radius={0.1} smoothness={6} material={hairMaterial} />
         </mesh>
-        <mesh position={[-0.56, -0.36, 0.28]} rotation={[0.08, 0, 0.1]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.12, 0.58, 0.3]} />
-        </mesh>
-        <mesh position={[-0.52, -0.15, 0.48]} rotation={[0, 0, -0.08]} material={hairMaterial}>
-          <boxGeometry args={[0.1, 0.5, 0.12]} />
+        <mesh position={[0, -0.38, -0.54]}>
+          <RoundedBox args={[1.02, 0.44, 0.18]} radius={0.08} smoothness={6} material={hairHighlightMaterial} />
         </mesh>
 
-        {/* Right Side Hair Locks (framing face cheeks) */}
-        <mesh position={[0.58, 0.02, 0.05]} material={hairMaterial}>
-          <boxGeometry args={[0.16, 0.95, 1.08]} />
+        {/* Left Side Hair Lock (framing cheek softly) */}
+        <mesh position={[-0.58, 0.02, 0.05]}>
+          <RoundedBox args={[0.16, 0.95, 1.05]} radius={0.08} smoothness={6} material={hairMaterial} />
         </mesh>
-        <mesh position={[0.56, -0.36, 0.28]} rotation={[0.08, 0, -0.1]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.12, 0.58, 0.3]} />
-        </mesh>
-        <mesh position={[0.52, -0.15, 0.48]} rotation={[0, 0, 0.08]} material={hairMaterial}>
-          <boxGeometry args={[0.1, 0.5, 0.12]} />
+        <mesh position={[-0.56, -0.36, 0.26]} rotation={[0.08, 0, 0.08]}>
+          <RoundedBox args={[0.12, 0.56, 0.28]} radius={0.06} smoothness={4} material={hairHighlightMaterial} />
         </mesh>
 
-        {/* Top Front Bangs (High up, framing forehead & talisman without blocking) */}
-        {/* Left Temple Bang */}
-        <mesh position={[-0.38, 0.38, 0.54]} rotation={[0, 0, -0.22]} material={hairMaterial}>
-          <boxGeometry args={[0.28, 0.35, 0.08]} />
+        {/* Right Side Hair Lock (framing cheek softly) */}
+        <mesh position={[0.58, 0.02, 0.05]}>
+          <RoundedBox args={[0.16, 0.95, 1.05]} radius={0.08} smoothness={6} material={hairMaterial} />
         </mesh>
-        {/* Left Brow Arch */}
-        <mesh position={[-0.2, 0.44, 0.54]} rotation={[0, 0, -0.1]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.22, 0.24, 0.08]} />
-        </mesh>
-        {/* Right Brow Arch */}
-        <mesh position={[0.22, 0.44, 0.54]} rotation={[0, 0, 0.1]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.22, 0.24, 0.08]} />
-        </mesh>
-        {/* Right Temple Bang */}
-        <mesh position={[0.38, 0.38, 0.54]} rotation={[0, 0, 0.22]} material={hairMaterial}>
-          <boxGeometry args={[0.28, 0.35, 0.08]} />
+        <mesh position={[0.56, -0.36, 0.26]} rotation={[0.08, 0, -0.08]}>
+          <RoundedBox args={[0.12, 0.56, 0.28]} radius={0.06} smoothness={4} material={hairHighlightMaterial} />
         </mesh>
 
-        {/* Signature Long Center-Right Hair Strand (As seen in reference photo!) */}
-        {/* Sweeps diagonally down in front of the forehead between talisman & eye */}
-        <mesh position={[0.09, 0.08, 0.545]} rotation={[-0.04, 0.06, 0.26]} material={hairMaterial}>
-          <boxGeometry args={[0.08, 0.62, 0.05]} />
+        {/* Forehead Hair Fringe (Resting high above brow & talisman, leaves face open & cute!) */}
+        <mesh position={[-0.32, 0.44, 0.51]} rotation={[0, 0, -0.16]}>
+          <RoundedBox args={[0.34, 0.22, 0.08]} radius={0.04} smoothness={4} material={hairMaterial} />
         </mesh>
-        <mesh position={[0.16, -0.12, 0.548]} rotation={[-0.04, 0.06, 0.32]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.06, 0.34, 0.04]} />
+        <mesh position={[0.32, 0.44, 0.51]} rotation={[0, 0, 0.16]}>
+          <RoundedBox args={[0.34, 0.22, 0.08]} radius={0.04} smoothness={4} material={hairMaterial} />
+        </mesh>
+        <mesh position={[0, 0.48, 0.52]}>
+          <RoundedBox args={[0.32, 0.18, 0.08]} radius={0.04} smoothness={4} material={hairHighlightMaterial} />
         </mesh>
       </group>
 

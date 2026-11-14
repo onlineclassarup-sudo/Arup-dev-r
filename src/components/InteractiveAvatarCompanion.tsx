@@ -248,38 +248,40 @@ function RobloxR6Model({
         </mesh>
 
         {faceTexture && (
-          <mesh position={[0, 0, 0.526]}>
-            <planeGeometry args={[1.02, 0.98]} />
-            <meshStandardMaterial map={faceTexture} transparent roughness={0.4} />
+          <mesh position={[0, 0, 0.525]}>
+            <planeGeometry args={[0.98, 0.95]} />
+            <meshStandardMaterial
+              map={faceTexture}
+              transparent
+              roughness={0.3}
+              alphaTest={0.01}
+              depthWrite={false}
+            />
           </mesh>
         )}
 
         {/* Brown anime hair */}
-        <mesh position={[0, 0.32, -0.04]}>
-          <RoundedBox args={[1.14, 0.68, 1.16]} radius={0.16} smoothness={8} material={hairMaterial} />
+        <mesh position={[0, 0.34, -0.04]}>
+          <RoundedBox args={[1.14, 0.65, 1.14]} radius={0.18} smoothness={8} material={hairMaterial} />
         </mesh>
-        <mesh position={[0, 0.54, -0.02]}>
-          <RoundedBox args={[0.96, 0.28, 0.98]} radius={0.12} smoothness={8} material={hairHighlightMaterial} />
+        <mesh position={[0, 0.55, -0.02]}>
+          <RoundedBox args={[0.96, 0.26, 0.96]} radius={0.12} smoothness={8} material={hairHighlightMaterial} />
         </mesh>
-        <mesh position={[0, -0.14, -0.56]} material={hairMaterial}>
-          <boxGeometry args={[1.12, 0.82, 0.22]} />
+        <mesh position={[0, -0.14, -0.56]}>
+          <RoundedBox args={[1.12, 0.82, 0.22]} radius={0.1} smoothness={6} material={hairMaterial} />
         </mesh>
-        <mesh position={[-0.58, 0.02, 0.05]} material={hairMaterial}>
-          <boxGeometry args={[0.16, 0.95, 1.08]} />
+        <mesh position={[-0.58, 0.02, 0.05]}>
+          <RoundedBox args={[0.16, 0.95, 1.05]} radius={0.08} smoothness={6} material={hairMaterial} />
         </mesh>
-        <mesh position={[0.58, 0.02, 0.05]} material={hairMaterial}>
-          <boxGeometry args={[0.16, 0.95, 1.08]} />
+        <mesh position={[0.58, 0.02, 0.05]}>
+          <RoundedBox args={[0.16, 0.95, 1.05]} radius={0.08} smoothness={6} material={hairMaterial} />
         </mesh>
-        {/* Bangs */}
-        <mesh position={[-0.38, 0.38, 0.54]} rotation={[0, 0, -0.22]} material={hairMaterial}>
-          <boxGeometry args={[0.28, 0.35, 0.08]} />
+        {/* Forehead fringe */}
+        <mesh position={[-0.32, 0.44, 0.51]} rotation={[0, 0, -0.16]}>
+          <RoundedBox args={[0.34, 0.22, 0.08]} radius={0.04} smoothness={4} material={hairMaterial} />
         </mesh>
-        <mesh position={[0.38, 0.38, 0.54]} rotation={[0, 0, 0.22]} material={hairMaterial}>
-          <boxGeometry args={[0.28, 0.35, 0.08]} />
-        </mesh>
-        {/* Center sweeping strand */}
-        <mesh position={[0.09, 0.08, 0.545]} rotation={[-0.04, 0.06, 0.26]} material={hairMaterial}>
-          <boxGeometry args={[0.08, 0.62, 0.05]} />
+        <mesh position={[0.32, 0.44, 0.51]} rotation={[0, 0, 0.16]}>
+          <RoundedBox args={[0.34, 0.22, 0.08]} radius={0.04} smoothness={4} material={hairMaterial} />
         </mesh>
       </group>
 
