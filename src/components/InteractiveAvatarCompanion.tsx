@@ -248,46 +248,39 @@ function RobloxR6Model({
         </mesh>
 
         {faceTexture && (
-          <mesh position={[0, 0, 0.53]}>
-            <planeGeometry args={[1.04, 1.04]} />
-            <meshStandardMaterial map={faceTexture} transparent roughness={0.45} />
+          <mesh position={[0, 0, 0.531]}>
+            <planeGeometry args={[1.05, 1.05]} />
+            <meshStandardMaterial map={faceTexture} transparent roughness={0.4} />
           </mesh>
         )}
 
         {/* Brown anime hair */}
-        <mesh position={[0, 0.28, -0.04]} material={hairMaterial}>
-          <boxGeometry args={[1.14, 0.72, 1.16]} />
+        <mesh position={[0, 0.32, -0.04]} material={hairMaterial}>
+          <boxGeometry args={[1.14, 0.65, 1.16]} />
         </mesh>
-        <mesh position={[0, 0.52, -0.02]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.96, 0.28, 0.98]} />
+        <mesh position={[0, 0.54, -0.02]} material={hairHighlightMaterial}>
+          <boxGeometry args={[0.96, 0.26, 0.98]} />
         </mesh>
         <mesh position={[0, -0.14, -0.56]} material={hairMaterial}>
           <boxGeometry args={[1.12, 0.82, 0.22]} />
         </mesh>
-        <mesh position={[-0.57, 0.02, 0.05]} material={hairMaterial}>
-          <boxGeometry args={[0.18, 0.95, 1.08]} />
+        <mesh position={[-0.58, 0.02, 0.05]} material={hairMaterial}>
+          <boxGeometry args={[0.16, 0.95, 1.08]} />
         </mesh>
-        <mesh position={[0.57, 0.02, 0.05]} material={hairMaterial}>
-          <boxGeometry args={[0.18, 0.95, 1.08]} />
+        <mesh position={[0.58, 0.02, 0.05]} material={hairMaterial}>
+          <boxGeometry args={[0.16, 0.95, 1.08]} />
         </mesh>
         {/* Bangs */}
-        <mesh position={[-0.32, 0.26, 0.56]} rotation={[0, 0, -0.15]} material={hairMaterial}>
-          <boxGeometry args={[0.38, 0.48, 0.12]} />
+        <mesh position={[-0.38, 0.38, 0.54]} rotation={[0, 0, -0.22]} material={hairMaterial}>
+          <boxGeometry args={[0.28, 0.35, 0.08]} />
         </mesh>
-        <mesh position={[0.36, 0.24, 0.56]} rotation={[0, 0, 0.18]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.36, 0.5, 0.12]} />
+        <mesh position={[0.38, 0.38, 0.54]} rotation={[0, 0, 0.22]} material={hairMaterial}>
+          <boxGeometry args={[0.28, 0.35, 0.08]} />
         </mesh>
-
-        {/* Paper Talisman on Forehead */}
-        <group position={[0.02, 0.32, 0.62]} rotation={[-0.08, 0.04, 0.08]}>
-          <mesh material={paperTalismanMaterial}>
-            <boxGeometry args={[0.32, 0.32, 0.015]} />
-          </mesh>
-          <mesh position={[0, 0, 0.009]}>
-            <planeGeometry args={[0.28, 0.28]} />
-            <meshBasicMaterial color="#0f172a" wireframe wireframeLinewidth={2} />
-          </mesh>
-        </group>
+        {/* Center sweeping strand */}
+        <mesh position={[0.09, 0.08, 0.545]} rotation={[-0.04, 0.06, 0.26]} material={hairMaterial}>
+          <boxGeometry args={[0.08, 0.62, 0.05]} />
+        </mesh>
       </group>
 
       {/* 2. TORSO */}
