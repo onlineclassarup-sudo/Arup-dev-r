@@ -83,13 +83,13 @@ export default function HeroSection() {
                 </motion.div>
               </div>
 
-              {/* On Mobile: Avatar is properly framed with zero clipping */}
+              {/* On Mobile: Avatar is properly framed with zero clipping, on top */}
               {isMounted && isMobile && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.35 }}
-                  className="w-[140px] h-[175px] sm:w-[170px] sm:h-[200px] relative shrink-0"
+                  className="w-[145px] h-[190px] sm:w-[175px] sm:h-[220px] relative shrink-0 z-20 pointer-events-auto"
                 >
                   <Hero3DCanvas compact />
                 </motion.div>
@@ -101,7 +101,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.2 }}
-              className="text-xs sm:text-base text-gray-400 font-sans leading-relaxed max-w-lg mb-6 sm:mb-8 mt-3"
+              className="text-xs sm:text-base text-gray-400 font-sans leading-relaxed max-w-lg mb-6 sm:mb-8 mt-4 relative z-10"
             >
               I build things, on the baseplate and off it. Gameplay systems, UI and tools, from Roblox Studio scripts to everything built around them.
             </motion.p>

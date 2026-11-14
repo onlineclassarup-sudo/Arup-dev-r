@@ -134,8 +134,8 @@ function RobloxDeveloperAvatar({
     onBehaviorChange('angry_walking', compact ? '😡 Hey!' : '😡 Hey! Don’t touch me!');
 
     walkDir.current = posX.current >= 0 ? -1 : 1;
-    // On compact mobile, limit horizontal shift so arms never get clipped!
-    targetPosX.current = walkDir.current * (compact ? 0.22 : 1.5);
+    // On compact mobile, stay in place so arms & feet NEVER hit the canvas boundary!
+    targetPosX.current = compact ? 0 : walkDir.current * 1.5;
   };
 
   const handlePointerLeave = (e: any) => {
@@ -177,7 +177,7 @@ function RobloxDeveloperAvatar({
       onBehaviorChange('idle', compact ? '👋 Tap me!' : 'Hover over me if you dare!');
     }
 
-    // 1. ANGRY WALKING
+    // 1. ANGRY WALKING / MARCHING
     if (behaviorRef.current === 'angry_walking') {
       walkClock.current += delta;
 
@@ -190,20 +190,25 @@ function RobloxDeveloperAvatar({
         headGroup.current.rotation.z = Math.cos(t * 18) * 0.08;
       }
 
-      // In compact mobile, turn 35 degrees so arms stay inside frame
-      const targetFacing = walkDir.current > 0 ? (compact ? Math.PI / 5 : Math.PI / 2) : (compact ? -Math.PI / 5 : -Math.PI / 2);
+      // In compact mobile, turn slightly (30 deg) so arms stay perfectly inside frame
+      const targetFacing = compact
+        ? Math.sin(t * 12) * 0.15
+        : walkDir.current > 0
+        ? Math.PI / 2
+        : -Math.PI / 2;
       rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, targetFacing, 0.18);
-      rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, 0.1, 0.1);
+      rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, 0.08, 0.1);
 
       posX.current = THREE.MathUtils.lerp(posX.current, targetPosX.current, 0.05);
       rootRef.current.position.x = posX.current;
-      rootRef.current.position.y = Math.abs(Math.sin(walkClock.current * 10)) * 0.08;
+      rootRef.current.position.y = (compact ? -0.42 : -0.15) + Math.abs(Math.sin(walkClock.current * 10)) * 0.08;
 
+      // Authentic R6 Walk cycle
       const step = Math.sin(walkClock.current * 10);
-      if (leftHip.current) leftHip.current.rotation.x = step * 0.85;
-      if (rightHip.current) rightHip.current.rotation.x = -step * 0.85;
-      if (leftShoulder.current) leftShoulder.current.rotation.x = -step * 0.75;
-      if (rightShoulder.current) rightShoulder.current.rotation.x = step * 0.75;
+      if (leftHip.current) leftHip.current.rotation.x = step * 0.8;
+      if (rightHip.current) rightHip.current.rotation.x = -step * 0.8;
+      if (leftShoulder.current) leftShoulder.current.rotation.x = -step * 0.7;
+      if (rightShoulder.current) rightShoulder.current.rotation.x = step * 0.7;
       return;
     }
 
@@ -215,7 +220,7 @@ function RobloxDeveloperAvatar({
 
       rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, -Math.PI / 2, 0.1);
       rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, 0, 0.1);
-      rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, -0.65, 0.1);
+      rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, compact ? -0.85 : -0.65, 0.1);
 
       if (leftHip.current) leftHip.current.rotation.x = 0;
       if (rightHip.current) rightHip.current.rotation.x = 0;
@@ -232,7 +237,7 @@ function RobloxDeveloperAvatar({
 
       rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, 0, 0.1);
       rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, -0.25, 0.1);
-      rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, -0.4, 0.1);
+      rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, compact ? -0.6 : -0.4, 0.1);
 
       if (leftHip.current) leftHip.current.rotation.x = -Math.PI / 2;
       if (rightHip.current) rightHip.current.rotation.x = -Math.PI / 2;
@@ -254,7 +259,7 @@ function RobloxDeveloperAvatar({
 
     posX.current = THREE.MathUtils.lerp(posX.current, 0, 0.1);
     rootRef.current.position.x = posX.current;
-    rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, 0, 0.1);
+    rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, compact ? -0.42 : -0.15, 0.1);
     rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, 0, 0.1);
 
     if (leftHip.current) leftHip.current.rotation.x = THREE.MathUtils.lerp(leftHip.current.rotation.x, 0, 0.15);
@@ -281,8 +286,8 @@ function RobloxDeveloperAvatar({
   return (
     <group
       ref={rootRef}
-      position={[0, compact ? -0.16 : -0.15, 0]}
-      scale={compact ? 0.82 : 0.78}
+      position={[0, compact ? -0.42 : -0.15, 0]}
+      scale={compact ? 0.72 : 0.78}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerEnter}
@@ -526,11 +531,11 @@ export default function Hero3DCanvas({ compact = false }: { compact?: boolean })
 
   return (
     <div className="w-full h-full relative select-none touch-pan-y flex items-center justify-center overflow-visible">
-      {/* Floating Status Mood Badge */}
-      <div className={`absolute ${compact ? 'top-0' : 'top-1 sm:top-2'} left-1/2 -translate-x-1/2 z-30 pointer-events-none max-w-[95%]`}>
+      {/* Floating Status Mood Badge - Cleanly positioned ABOVE the head */}
+      <div className={`absolute ${compact ? 'top-1' : 'top-1 sm:top-2'} left-1/2 -translate-x-1/2 z-30 pointer-events-none max-w-[95%]`}>
         <div
           className={`rounded-full font-mono font-medium backdrop-blur-md border shadow-xl transition-all duration-300 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ${
-            compact ? 'px-2 py-0.5 text-[10px] gap-1' : 'px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs gap-1.5 sm:gap-2'
+            compact ? 'px-2.5 py-0.5 text-[10px] gap-1' : 'px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs gap-1.5 sm:gap-2'
           } ${
             behavior === 'angry_walking'
               ? 'bg-red-500/25 border-red-500/60 text-red-200 animate-bounce'
@@ -558,9 +563,9 @@ export default function Hero3DCanvas({ compact = false }: { compact?: boolean })
         </div>
       </div>
 
-      {/* 3D Canvas */}
+      {/* 3D Canvas with safe camera framing - Arms and Feet NEVER clip! */}
       <Canvas
-        camera={{ position: [0, compact ? 0.1 : 0.1, compact ? 5.0 : 5.4], fov: compact ? 42 : 42 }}
+        camera={{ position: [0, compact ? 0.05 : 0.1, compact ? 5.6 : 5.4], fov: compact ? 42 : 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
         style={{ touchAction: 'pan-y' }}
