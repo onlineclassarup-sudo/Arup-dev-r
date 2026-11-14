@@ -5,15 +5,15 @@ import CustomCursor from '@/components/CustomCursor';
 import { DEVELOPER_INFO } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: `${DEVELOPER_INFO.name} | Roblox Lead Developer & Technical Systems Architect`,
+  title: `${DEVELOPER_INFO.name} | Aspiring Developer`,
   description: `${DEVELOPER_INFO.tagline} Discover AAA Roblox production games, live server telemetry, and acquisition of commercial Luau systems & assets.`,
   keywords: [
+    'Aspiring Developer',
     'Roblox Developer',
     'Roblox Studio',
     'Luau Scripting',
     'Roblox Portfolio',
     'Roblox Systems Architect',
-    'Roblox Lead Developer',
     'Sylhety Vibes',
     'LAXUIRES PARK',
     'Lumina Hangout',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    title: `${DEVELOPER_INFO.name} | Roblox Lead Developer Portfolio & Systems Marketplace`,
+    title: `${DEVELOPER_INFO.name} | Aspiring Developer Portfolio`,
     description: DEVELOPER_INFO.tagline,
     siteName: `${DEVELOPER_INFO.name} // DEV`,
   },

@@ -78,7 +78,7 @@ export default function HeroSection() {
                   transition={{ duration: 0.35, delay: 0.15 }}
                   className="flex items-center gap-1.5 text-sm sm:text-base lg:text-lg font-mono text-gray-300"
                 >
-                  <span>Roblox developer</span>
+                  <span>Aspiring developer</span>
                   <span className="inline-block w-2 sm:w-2.5 h-4 sm:h-5 bg-gray-300 animate-pulse ml-0.5" />
                 </motion.div>
               </div>

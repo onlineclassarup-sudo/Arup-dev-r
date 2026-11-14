@@ -2,9 +2,9 @@ import { RobloxGame, StoreAsset, TechSkill } from '@/types';
 
 export const DEVELOPER_INFO = {
   name: 'Arup',
-  title: 'Roblox Lead Developer & Technical Systems Architect',
+  title: 'Aspiring Developer',
   tagline: 'Architecting Next-Gen Worlds & Ready-to-Deploy Roblox Systems.',
-  bio: "Hi, I'm Arup. Lead Roblox Developer & Systems Creator. I specialize in high-performance Luau frameworks, custom physics, scalable networking, and immersive AAA experiences. Explore my production games or acquire custom game mechanics.",
+  bio: "Hi, I'm Arup. Aspiring Roblox Developer & Systems Creator. I specialize in high-performance Luau frameworks, custom physics, scalable networking, and immersive AAA experiences. Explore my production games or acquire custom game mechanics.",
   discord: 'toxicobito0',
   email: 'arupchaki545@gmail.com',
   availability: 'Available for Freelance & Studio Contracts',

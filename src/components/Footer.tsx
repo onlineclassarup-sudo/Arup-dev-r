@@ -18,7 +18,7 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3">
             <span className="text-white font-semibold">Created By Arup</span>
             <span>•</span>
-            <span>Roblox Lead Developer</span>
+            <span>Aspiring Developer</span>
             <span>•</span>
             <span className="text-gray-400">Discord: {DEVELOPER_INFO.discord}</span>
           </div>
