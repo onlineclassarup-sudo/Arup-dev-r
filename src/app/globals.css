@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #0b0c10;
+  color: #f3f4f6;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: #0b0c10;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Roblox Baseplate Grid Background */
+.baseplate-grid {
+  background-color: #0b0c10;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (max-width: 640px) {
+  .baseplate-grid {
+    background-size: 36px 36px;
+  }
+}
+
+/* Clean 3law Style Card */
+.roblox-card {
+  background-color: #121318;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  transition: all 0.25s ease-out;
+}
+
+.roblox-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background-color: #15171e;
+}
+
+/* Rounded Pill Button */
+.pill-chip {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #d1d5db;
+  transition: all 0.2s ease;
+}
+
+.pill-chip:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Smooth live indicator */
+@keyframes studio-pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+.live-dot {
+  animation: studio-pulse 2s infinite ease-in-out;
+}
