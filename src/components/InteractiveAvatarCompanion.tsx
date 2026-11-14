@@ -241,25 +241,25 @@ function RobloxR6Model({
     <group ref={avatarRoot} position={[2.4, 0.2, 0]} scale={0.58}>
       {/* 1. HEAD */}
       <group ref={headGroup} position={[0, 1.85, 0]}>
-        <RoundedBox args={[1.05, 1.05, 1.05]} radius={0.08} smoothness={4} material={skinMaterial} />
+        <RoundedBox args={[1.08, 1.0, 1.04]} radius={0.28} smoothness={12} material={skinMaterial} />
 
         <mesh position={[0, -0.56, 0]} material={skinMaterial}>
           <cylinderGeometry args={[0.3, 0.3, 0.15, 16]} />
         </mesh>
 
         {faceTexture && (
-          <mesh position={[0, 0, 0.531]}>
-            <planeGeometry args={[1.05, 1.05]} />
+          <mesh position={[0, 0, 0.526]}>
+            <planeGeometry args={[1.02, 0.98]} />
             <meshStandardMaterial map={faceTexture} transparent roughness={0.4} />
           </mesh>
         )}
 
         {/* Brown anime hair */}
-        <mesh position={[0, 0.32, -0.04]} material={hairMaterial}>
-          <boxGeometry args={[1.14, 0.65, 1.16]} />
+        <mesh position={[0, 0.32, -0.04]}>
+          <RoundedBox args={[1.14, 0.68, 1.16]} radius={0.16} smoothness={8} material={hairMaterial} />
         </mesh>
-        <mesh position={[0, 0.54, -0.02]} material={hairHighlightMaterial}>
-          <boxGeometry args={[0.96, 0.26, 0.98]} />
+        <mesh position={[0, 0.54, -0.02]}>
+          <RoundedBox args={[0.96, 0.28, 0.98]} radius={0.12} smoothness={8} material={hairHighlightMaterial} />
         </mesh>
         <mesh position={[0, -0.14, -0.56]} material={hairMaterial}>
           <boxGeometry args={[1.12, 0.82, 0.22]} />

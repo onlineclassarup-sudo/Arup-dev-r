@@ -16,11 +16,14 @@ function makeCanvas(width: number, height: number, draw: (ctx: CanvasRenderingCo
 }
 
 /**
- * 1. Face Texture - Exact Match to Reference Image
- * - Classic Roblox fair skin (#fae0cb)
- * - Forehead white paper talisman ("DO NOT TOUCH MY LOVE") with tape at top
- * - Bold anime squinting eyes pointing outward (< and >)
- * - Tilted open laughing mouth with single sharp white fang on upper left and pink tongue at bottom
+ * 1. Face Texture - Exact Authentic "Gol Sundor" (Rounded & Beautiful)
+ * - Beautiful warm fair skin (#fae0cb)
+ * - Perfectly curved, deep rounded U-smile mouth ("গোল সুন্দর")
+ * - Single iconic sharp white fang on upper left
+ * - Deep ruby interior with smooth round pink tongue
+ * - Bold anime squint eyes (< and >) with cute top lashes
+ * - Centered vertical talisman note: "DO NOT TOUCH MY LOVE" with top tape
+ * - Soft round blush on both cheeks
  */
 export function createFaceTexture(): THREE.CanvasTexture | null {
   return makeCanvas(512, 512, (ctx) => {
@@ -28,51 +31,51 @@ export function createFaceTexture(): THREE.CanvasTexture | null {
     ctx.fillStyle = '#fae0cb';
     ctx.fillRect(0, 0, 512, 512);
 
-    // Soft warm blush under eyes
-    const blushL = ctx.createRadialGradient(145, 340, 5, 145, 340, 48);
-    blushL.addColorStop(0, 'rgba(255, 130, 140, 0.35)');
+    // Soft round blush on cheeks ("গোল সুন্দর")
+    const blushL = ctx.createRadialGradient(140, 335, 4, 140, 335, 44);
+    blushL.addColorStop(0, 'rgba(255, 130, 140, 0.45)');
     blushL.addColorStop(1, 'rgba(255, 130, 140, 0)');
     ctx.fillStyle = blushL;
     ctx.beginPath();
-    ctx.arc(145, 340, 48, 0, Math.PI * 2);
+    ctx.arc(140, 335, 44, 0, Math.PI * 2);
     ctx.fill();
 
-    const blushR = ctx.createRadialGradient(367, 340, 5, 367, 340, 48);
-    blushR.addColorStop(0, 'rgba(255, 130, 140, 0.35)');
+    const blushR = ctx.createRadialGradient(372, 335, 4, 372, 335, 44);
+    blushR.addColorStop(0, 'rgba(255, 130, 140, 0.45)');
     blushR.addColorStop(1, 'rgba(255, 130, 140, 0)');
     ctx.fillStyle = blushR;
     ctx.beginPath();
-    ctx.arc(367, 340, 48, 0, Math.PI * 2);
+    ctx.arc(372, 335, 44, 0, Math.PI * 2);
     ctx.fill();
 
     // -------------------------------------------------------------
     // 2. Forehead Talisman / Paper Tag ("DO NOT TOUCH MY LOVE")
-    // Hangs vertically down the center of the forehead
+    // Centered neatly between the eyes
     // -------------------------------------------------------------
     ctx.save();
-    const tagX = 250;
-    const tagY = 205; // Center of tag
-    const tagW = 104;
-    const tagH = 158;
+    const tagX = 256;
+    const tagY = 195;
+    const tagW = 98;
+    const tagH = 148;
 
-    // Subtle paper shadow
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
-    ctx.fillRect(tagX - tagW / 2 + 4, tagY - tagH / 2 + 4, tagW, tagH);
+    // Subtle drop shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.16)';
+    ctx.fillRect(tagX - tagW / 2 + 3, tagY - tagH / 2 + 3, tagW, tagH);
 
-    // Paper background
-    ctx.fillStyle = '#f8f8f8';
+    // White paper slip
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(tagX - tagW / 2, tagY - tagH / 2, tagW, tagH);
 
-    // Paper fine dark border
+    // Fine dark inner border
     ctx.strokeStyle = '#18181b';
     ctx.lineWidth = 2.5;
     ctx.strokeRect(tagX - tagW / 2 + 2, tagY - tagH / 2 + 2, tagW - 4, tagH - 4);
 
     // Jagged / torn bottom edge detail
-    ctx.fillStyle = '#fae0cb'; // skin color cutting into paper bottom
+    ctx.fillStyle = '#fae0cb'; // cuts into paper bottom
     ctx.beginPath();
     ctx.moveTo(tagX - tagW / 2 - 2, tagY + tagH / 2);
-    ctx.lineTo(tagX - tagW / 4, tagY + tagH / 2 - 6);
+    ctx.lineTo(tagX - tagW / 4, tagY + tagH / 2 - 5);
     ctx.lineTo(tagX, tagY + tagH / 2);
     ctx.lineTo(tagX + tagW / 4, tagY + tagH / 2 - 5);
     ctx.lineTo(tagX + tagW / 2 + 2, tagY + tagH / 2);
@@ -81,153 +84,153 @@ export function createFaceTexture(): THREE.CanvasTexture | null {
     ctx.closePath();
     ctx.fill();
 
-    // Tape at the top of the tag
+    // Semi-translucent tape at the top
     ctx.fillStyle = 'rgba(235, 230, 220, 0.9)';
-    ctx.fillRect(tagX - 22, tagY - tagH / 2 - 14, 44, 22);
+    ctx.fillRect(tagX - 20, tagY - tagH / 2 - 12, 40, 20);
     ctx.strokeStyle = 'rgba(180, 170, 155, 0.6)';
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(tagX - 22, tagY - tagH / 2 - 14, 44, 22);
+    ctx.strokeRect(tagX - 20, tagY - tagH / 2 - 12, 40, 20);
 
-    // Text on talisman (Exact lines from the reference)
+    // Text on talisman: "DO NOT TOUCH MY LOVE"
     ctx.fillStyle = '#0f172a';
     ctx.textAlign = 'center';
-    ctx.font = '900 16px "Arial Black", Impact, sans-serif';
-    ctx.fillText('DO', tagX, tagY - 48);
-    ctx.font = '900 17px "Arial Black", Impact, sans-serif';
-    ctx.fillText('NOT', tagX, tagY - 26);
-    ctx.font = '900 14px "Arial Black", Impact, sans-serif';
-    ctx.fillText('TOUCH', tagX, tagY - 6);
     ctx.font = '900 15px "Arial Black", Impact, sans-serif';
-    ctx.fillText('MY', tagX, tagY + 14);
+    ctx.fillText('DO', tagX, tagY - 44);
     ctx.font = '900 16px "Arial Black", Impact, sans-serif';
-    ctx.fillText('LOVE', tagX, tagY + 36);
+    ctx.fillText('NOT', tagX, tagY - 24);
+    ctx.font = '900 13px "Arial Black", Impact, sans-serif';
+    ctx.fillText('TOUCH', tagX, tagY - 5);
+    ctx.font = '900 14px "Arial Black", Impact, sans-serif';
+    ctx.fillText('MY', tagX, tagY + 14);
+    ctx.font = '900 15px "Arial Black", Impact, sans-serif';
+    ctx.fillText('LOVE', tagX, tagY + 34);
 
     // Bottom seal / barcode lines
     ctx.fillStyle = '#334155';
-    for (let bx = tagX - 35; bx <= tagX + 35; bx += 7) {
+    for (let bx = tagX - 32; bx <= tagX + 32; bx += 7) {
       const bw = bx % 14 === 0 ? 3.5 : 2;
-      ctx.fillRect(bx, tagY + 54, bw, 10);
+      ctx.fillRect(bx, tagY + 50, bw, 10);
     }
 
     ctx.restore();
 
     // -------------------------------------------------------------
     // 3. Anime Squinting Eyes
-    // Bold, crisp black lines pointing outward (< on left, > on right)
+    // Bold, clean lines pointing outward (< on left, > on right)
     // -------------------------------------------------------------
     ctx.strokeStyle = '#111111';
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // Left Eye (< pointing to the left)
+    // Left Eye (< pointing outward left)
     ctx.lineWidth = 15;
     ctx.beginPath();
-    ctx.moveTo(186, 268);
-    ctx.lineTo(112, 285);
-    ctx.lineTo(178, 312);
+    ctx.moveTo(192, 268);
+    ctx.lineTo(122, 285);
+    ctx.lineTo(186, 308);
     ctx.stroke();
 
     // Left eye cute top lash
     ctx.lineWidth = 7;
     ctx.beginPath();
-    ctx.moveTo(136, 280);
-    ctx.lineTo(124, 264);
+    ctx.moveTo(144, 280);
+    ctx.lineTo(132, 264);
     ctx.stroke();
 
-    // Right Eye (> pointing to the right) - Clear & prominent in reference!
+    // Right Eye (> pointing outward right)
     ctx.lineWidth = 15;
     ctx.beginPath();
-    ctx.moveTo(318, 268);
-    ctx.lineTo(396, 285);
-    ctx.lineTo(326, 312);
+    ctx.moveTo(320, 268);
+    ctx.lineTo(390, 285);
+    ctx.lineTo(326, 308);
     ctx.stroke();
 
     // Right eye cute top lash
     ctx.lineWidth = 7;
     ctx.beginPath();
-    ctx.moveTo(372, 280);
-    ctx.lineTo(384, 264);
+    ctx.moveTo(368, 280);
+    ctx.lineTo(380, 264);
     ctx.stroke();
 
     // -------------------------------------------------------------
-    // 4. Mischievous Laughing Mouth with Single Sharp Fang
-    // Tilted upwards on the right side
+    // 4. "GOL SUNDOR" ROUND CHEERFUL MOUTH WITH SINGLE FANG
+    // Beautiful, perfectly rounded U-smile cavity (গোল সুন্দর)
     // -------------------------------------------------------------
     ctx.save();
     ctx.beginPath();
 
-    // Upper lip starts at left (192, 356), dips slightly and rises high to right (328, 332)
-    ctx.moveTo(192, 356);
-    ctx.quadraticCurveTo(256, 352, 328, 332);
-    // Lower lip drops down to deep cheerful smile (258, 428)
-    ctx.quadraticCurveTo(342, 412, 258, 428);
-    ctx.quadraticCurveTo(180, 412, 192, 356);
+    const mouthL = 188;
+    const mouthR = 328;
+    const mouthTopY = 346;
+    const mouthBottomY = 432;
+    const mouthMidX = 258;
+
+    // Top lip: starts left (188, 348), slight gentle arch, rises slightly to (328, 342)
+    ctx.moveTo(mouthL, mouthTopY + 2);
+    ctx.quadraticCurveTo(mouthMidX, mouthTopY - 4, mouthR, mouthTopY - 4);
+
+    // Bottom lip: Perfectly rounded, deep U-smile curve down to (258, 432)
+    ctx.bezierCurveTo(mouthR + 6, mouthBottomY, mouthL - 6, mouthBottomY, mouthL, mouthTopY + 2);
     ctx.closePath();
 
-    // Deep crimson / ruby red mouth interior
-    ctx.fillStyle = '#a61c22';
+    // Deep vibrant red / ruby cavity
+    ctx.fillStyle = '#b91c1c';
     ctx.fill();
 
-    // Clip inside mouth to draw tongue and fang
+    // Clip inside mouth to draw tongue & fang
     ctx.clip();
 
-    // Rounded pink tongue at the bottom of the mouth
-    ctx.fillStyle = '#ea7e8a';
+    // Round cute pink tongue at bottom of mouth ("গোল সুন্দর")
+    ctx.fillStyle = '#fb7185';
     ctx.beginPath();
-    ctx.ellipse(262, 432, 54, 40, 0, 0, Math.PI * 2);
+    ctx.arc(mouthMidX, mouthBottomY - 14, 46, 0, Math.PI * 2);
     ctx.fill();
 
     // Single Sharp White Vampire / Anime Fang on Upper Left!
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.moveTo(204, 354);
-    ctx.lineTo(215, 386); // Sharp downward tip
-    ctx.lineTo(230, 354);
+    ctx.moveTo(202, mouthTopY - 2);
+    ctx.lineTo(214, mouthTopY + 30); // sharp downward tip
+    ctx.lineTo(228, mouthTopY - 2);
     ctx.closePath();
     ctx.fill();
 
-    // Fang black outline
+    // Fang dark outline
     ctx.strokeStyle = '#111111';
     ctx.lineWidth = 4;
     ctx.stroke();
 
     ctx.restore();
 
-    // Outer bold mouth outline
+    // Outer bold mouth outline - smooth, thick & rounded!
     ctx.strokeStyle = '#111111';
     ctx.lineWidth = 11;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
-    ctx.moveTo(192, 356);
-    ctx.quadraticCurveTo(256, 352, 328, 332);
-    ctx.quadraticCurveTo(342, 412, 258, 428);
-    ctx.quadraticCurveTo(180, 412, 192, 356);
+    ctx.moveTo(mouthL, mouthTopY + 2);
+    ctx.quadraticCurveTo(mouthMidX, mouthTopY - 4, mouthR, mouthTopY - 4);
+    ctx.bezierCurveTo(mouthR + 6, mouthBottomY, mouthL - 6, mouthBottomY, mouthL, mouthTopY + 2);
     ctx.closePath();
     ctx.stroke();
 
-    // Smirk corner tick on upper right
-    ctx.lineWidth = 7;
+    // Cheerful smile corner tick on right
+    ctx.lineWidth = 6;
     ctx.beginPath();
-    ctx.moveTo(328, 332);
-    ctx.lineTo(340, 324);
+    ctx.moveTo(mouthR, mouthTopY - 4);
+    ctx.lineTo(mouthR + 10, mouthTopY - 12);
     ctx.stroke();
   });
 }
 
 /**
  * 2. Shirt Front Texture
- * Crisp white shirt with:
- * - Pusheen the cat wearing round black-framed glasses
- * - Diagonally crossing messenger bag strap
  */
 export function createShirtFrontTexture(): THREE.CanvasTexture | null {
   return makeCanvas(512, 512, (ctx) => {
-    // Pure crisp white t-shirt background
     ctx.fillStyle = '#f8fafc';
     ctx.fillRect(0, 0, 512, 512);
 
-    // Crew neckline trim
     ctx.fillStyle = '#edeef2';
     ctx.beginPath();
     ctx.arc(256, 0, 95, 0, Math.PI);
@@ -237,7 +240,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.arc(256, 0, 78, 0, Math.PI);
     ctx.fill();
 
-    // Crossbody Strap (Avatar's Right Shoulder -> Left Hip)
     ctx.save();
     ctx.strokeStyle = '#c4b3a2';
     ctx.lineWidth = 52;
@@ -246,7 +248,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.lineTo(470, 530);
     ctx.stroke();
 
-    // Strap edge stitches
     ctx.strokeStyle = '#9c8874';
     ctx.lineWidth = 3;
     ctx.setLineDash([8, 6]);
@@ -259,18 +260,15 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.setLineDash([]);
     ctx.restore();
 
-    // Pusheen with Glasses Graphic (Centered on chest)
     ctx.save();
     const cx = 252;
     const cy = 295;
 
-    // Body shadow
     ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
     ctx.beginPath();
     ctx.ellipse(cx, cy + 92, 105, 18, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Pusheen body base
     ctx.fillStyle = '#cfbeab';
     ctx.strokeStyle = '#4a3c30';
     ctx.lineWidth = 9;
@@ -290,7 +288,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.fill();
     ctx.stroke();
 
-    // Tabby Stripes on head
     ctx.fillStyle = '#7a6a5d';
     ctx.beginPath();
     ctx.roundRect(cx - 7, cy - 82, 14, 22, 6);
@@ -302,7 +299,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.roundRect(cx + 20, cy - 74, 12, 18, 5);
     ctx.fill();
 
-    // Tabby stripes on back
     ctx.beginPath();
     ctx.roundRect(cx - 114, cy - 12, 24, 11, 5);
     ctx.fill();
@@ -310,7 +306,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.roundRect(cx - 118, cy + 16, 26, 11, 5);
     ctx.fill();
 
-    // Inner ears
     ctx.fillStyle = '#f9a8d4';
     ctx.beginPath();
     ctx.moveTo(cx - 70, cy - 96);
@@ -326,21 +321,18 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.closePath();
     ctx.fill();
 
-    // Eyes behind glasses
     ctx.fillStyle = '#221915';
     ctx.beginPath();
     ctx.arc(cx - 36, cy - 20, 8, 0, Math.PI * 2);
     ctx.arc(cx + 36, cy - 20, 8, 0, Math.PI * 2);
     ctx.fill();
 
-    // Eye shines
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
     ctx.arc(cx - 38, cy - 23, 3, 0, Math.PI * 2);
     ctx.arc(cx + 34, cy - 23, 3, 0, Math.PI * 2);
     ctx.fill();
 
-    // Black nerd glasses frames
     ctx.strokeStyle = '#18181b';
     ctx.lineWidth = 8;
     ctx.beginPath();
@@ -350,13 +342,11 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.arc(cx + 36, cy - 20, 26, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Glasses bridge
     ctx.beginPath();
     ctx.moveTo(cx - 10, cy - 20);
     ctx.lineTo(cx + 10, cy - 20);
     ctx.stroke();
 
-    // Glasses frame sides
     ctx.beginPath();
     ctx.moveTo(cx - 62, cy - 20);
     ctx.lineTo(cx - 82, cy - 24);
@@ -364,7 +354,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.lineTo(cx + 82, cy - 24);
     ctx.stroke();
 
-    // Cute Cat Mouth :3
     ctx.strokeStyle = '#4a3c30';
     ctx.lineWidth = 5;
     ctx.beginPath();
@@ -374,7 +363,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.arc(cx + 9, cy + 12, 9, 0, Math.PI);
     ctx.stroke();
 
-    // Whiskers
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.moveTo(cx - 80, cy - 4);
@@ -392,7 +380,6 @@ export function createShirtFrontTexture(): THREE.CanvasTexture | null {
     ctx.lineTo(cx + 118, cy + 38);
     ctx.stroke();
 
-    // Cute front paws
     ctx.fillStyle = '#cfbeab';
     ctx.lineWidth = 6;
     ctx.beginPath();
@@ -447,7 +434,6 @@ export function createBackpackPusheenTexture(): THREE.CanvasTexture | null {
     ctx.fillRect(398, 380, 40, 30);
     ctx.strokeRect(398, 380, 40, 30);
 
-    // Pusheen Eating Donut
     ctx.save();
     const cx = 256;
     const cy = 250;
@@ -503,7 +489,6 @@ export function createBackpackPusheenTexture(): THREE.CanvasTexture | null {
     ctx.lineTo(cx + 108, cy + 4);
     ctx.stroke();
 
-    // Strawberry Donut
     ctx.fillStyle = '#fcd34d';
     ctx.strokeStyle = '#b45309';
     ctx.lineWidth = 5;
