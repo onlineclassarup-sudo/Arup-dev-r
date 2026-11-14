@@ -134,7 +134,8 @@ function RobloxDeveloperAvatar({
     onBehaviorChange('angry_walking', compact ? '😡 Hey!' : '😡 Hey! Don’t touch me!');
 
     walkDir.current = posX.current >= 0 ? -1 : 1;
-    targetPosX.current = walkDir.current * (compact ? 0.7 : 1.5);
+    // On compact mobile, limit horizontal shift so arms never get clipped!
+    targetPosX.current = walkDir.current * (compact ? 0.22 : 1.5);
   };
 
   const handlePointerLeave = (e: any) => {
@@ -189,7 +190,8 @@ function RobloxDeveloperAvatar({
         headGroup.current.rotation.z = Math.cos(t * 18) * 0.08;
       }
 
-      const targetFacing = walkDir.current > 0 ? Math.PI / 2 : -Math.PI / 2;
+      // In compact mobile, turn 35 degrees so arms stay inside frame
+      const targetFacing = walkDir.current > 0 ? (compact ? Math.PI / 5 : Math.PI / 2) : (compact ? -Math.PI / 5 : -Math.PI / 2);
       rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, targetFacing, 0.18);
       rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, 0.1, 0.1);
 
@@ -279,8 +281,8 @@ function RobloxDeveloperAvatar({
   return (
     <group
       ref={rootRef}
-      position={[0, compact ? -0.1 : -0.15, 0]}
-      scale={compact ? 0.92 : 0.78}
+      position={[0, compact ? -0.16 : -0.15, 0]}
+      scale={compact ? 0.82 : 0.78}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerEnter}
@@ -523,12 +525,12 @@ export default function Hero3DCanvas({ compact = false }: { compact?: boolean })
   };
 
   return (
-    <div className="w-full h-full relative select-none touch-pan-y flex items-center justify-center">
+    <div className="w-full h-full relative select-none touch-pan-y flex items-center justify-center overflow-visible">
       {/* Floating Status Mood Badge */}
-      <div className={`absolute ${compact ? '-top-1' : 'top-1 sm:top-2'} left-1/2 -translate-x-1/2 z-30 pointer-events-none max-w-[95%]`}>
+      <div className={`absolute ${compact ? 'top-0' : 'top-1 sm:top-2'} left-1/2 -translate-x-1/2 z-30 pointer-events-none max-w-[95%]`}>
         <div
           className={`rounded-full font-mono font-medium backdrop-blur-md border shadow-xl transition-all duration-300 flex items-center whitespace-nowrap overflow-hidden text-ellipsis ${
-            compact ? 'px-2.5 py-0.5 text-[11px] gap-1' : 'px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs gap-1.5 sm:gap-2'
+            compact ? 'px-2 py-0.5 text-[10px] gap-1' : 'px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs gap-1.5 sm:gap-2'
           } ${
             behavior === 'angry_walking'
               ? 'bg-red-500/25 border-red-500/60 text-red-200 animate-bounce'
@@ -558,7 +560,7 @@ export default function Hero3DCanvas({ compact = false }: { compact?: boolean })
 
       {/* 3D Canvas */}
       <Canvas
-        camera={{ position: [0, compact ? 0.2 : 0.1, compact ? 4.5 : 5.4], fov: compact ? 44 : 42 }}
+        camera={{ position: [0, compact ? 0.1 : 0.1, compact ? 5.0 : 5.4], fov: compact ? 42 : 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
         style={{ touchAction: 'pan-y' }}

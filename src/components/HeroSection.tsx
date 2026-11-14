@@ -34,7 +34,7 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           {/* Left Hero Details */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
+          <div className="lg:col-span-7 flex flex-col items-start text-left w-full">
             {/* Status Pill */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
@@ -48,9 +48,9 @@ export default function HeroSection() {
               </span>
             </motion.div>
 
-            {/* Title + Mobile Avatar Row */}
-            <div className="flex items-center justify-between gap-2 w-full mb-3 sm:mb-4">
-              <div className="flex flex-col min-w-0">
+            {/* Title + Mobile Avatar Row (Cleanly bounded so avatar never clips or overlaps text) */}
+            <div className="flex items-center justify-between gap-3 w-full mb-2">
+              <div className="flex flex-col flex-1 min-w-0 pr-1">
                 {/* Sub-label above big name */}
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
@@ -83,25 +83,25 @@ export default function HeroSection() {
                 </motion.div>
               </div>
 
-              {/* On Mobile: Avatar is larger & prominent right beside the title block */}
+              {/* On Mobile: Avatar is properly framed with zero clipping */}
               {isMounted && isMobile && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.35 }}
-                  className="w-[160px] h-[200px] sm:w-[190px] sm:h-[230px] relative shrink-0 -my-4"
+                  className="w-[140px] h-[175px] sm:w-[170px] sm:h-[200px] relative shrink-0"
                 >
                   <Hero3DCanvas compact />
                 </motion.div>
               )}
             </div>
 
-            {/* Concise Bio */}
+            {/* Concise Bio with clear spacing (zero overlap) */}
             <motion.p
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.2 }}
-              className="text-xs sm:text-base text-gray-400 font-sans leading-relaxed max-w-lg mb-6 sm:mb-8 mt-2"
+              className="text-xs sm:text-base text-gray-400 font-sans leading-relaxed max-w-lg mb-6 sm:mb-8 mt-3"
             >
               I build things, on the baseplate and off it. Gameplay systems, UI and tools, from Roblox Studio scripts to everything built around them.
             </motion.p>
