@@ -5,6 +5,13 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import { soundFx } from '@/lib/audio';
+import {
+  createFaceTexture,
+  createShirtFrontTexture,
+  createBackpackPusheenTexture,
+  createCashNotesTexture,
+  createPantsTexture,
+} from './robloxAvatarTextures';
 
 type AvatarBehavior = 'idle' | 'angry_walking' | 'sitting' | 'lying_down';
 
@@ -15,8 +22,14 @@ interface AvatarProps {
 }
 
 // ----------------------------------------------------------------------
-// High-End, Authentic Roblox Developer Avatar (R6 Proportions, Hoodie,
-// Backward Cap, Studio Headset, Expressive Face, High-Tops & Shadow)
+// Authentic Roblox R6 Avatar:
+// - Chocolate brown anime layered hair with bangs & side locks
+// - Expressive anime face (> < laughing eyes, cute open mouth, blush)
+// - "NOT MY LOVE" white paper talisman on forehead
+// - White t-shirt with Pusheen wearing glasses & diagonal crossbody strap
+// - Short-sleeve bare arms
+// - Tan duffle backpack with Pusheen eating donut & banknotes sticking out
+// - Baggy white cargo pants with side flap pockets & rolled cuffs
 // ----------------------------------------------------------------------
 function RobloxDeveloperAvatar({
   scrollOffset,
@@ -42,74 +55,105 @@ function RobloxDeveloperAvatar({
   const walkDir = useRef(1);
 
   // --------------------------------------------------------------------
-  // Materials - Carefully Tuned for Contrast against dark grid
+  // Dynamic Textures
+  // --------------------------------------------------------------------
+  const faceTexture = useMemo(() => createFaceTexture(), []);
+  const shirtFrontTexture = useMemo(() => createShirtFrontTexture(), []);
+  const backpackTexture = useMemo(() => createBackpackPusheenTexture(), []);
+  const cashTexture = useMemo(() => createCashNotesTexture(), []);
+  const pantsTexture = useMemo(() => createPantsTexture(), []);
+
+  // --------------------------------------------------------------------
+  // Materials
   // --------------------------------------------------------------------
   const skinMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#ffdfba',
+        color: '#fae0cb',
+        roughness: 0.5,
+        metalness: 0.04,
+      }),
+    []
+  );
+
+  const hairMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#442817', // Rich chocolate brown
+        roughness: 0.42,
+        metalness: 0.08,
+      }),
+    []
+  );
+
+  const hairHighlightMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#5a3821', // Slightly lighter brown for depth
+        roughness: 0.38,
+        metalness: 0.1,
+      }),
+    []
+  );
+
+  const whiteShirtMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#f8fafc',
+        roughness: 0.35,
+        metalness: 0.05,
+      }),
+    []
+  );
+
+  const whitePantsMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#f3f4f6',
         roughness: 0.45,
         metalness: 0.05,
       }),
     []
   );
 
-  const hoodieMaterial = useMemo(
+  const tanBagMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#1e2433',
-        roughness: 0.35,
-        metalness: 0.15,
-      }),
-    []
-  );
-
-  const whiteAccent = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#f8fafc',
-        roughness: 0.2,
-        metalness: 0.1,
-      }),
-    []
-  );
-
-  const capMaterial = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#11131a',
-        roughness: 0.3,
-        metalness: 0.4,
-      }),
-    []
-  );
-
-  const pantsMaterial = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: '#282d3c',
+        color: '#cfbfad', // Warm sandy tan canvas
         roughness: 0.45,
+        metalness: 0.08,
+      }),
+    []
+  );
+
+  const strapMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#b5a18d',
+        roughness: 0.4,
         metalness: 0.1,
       }),
     []
   );
 
-  const glowMaterial = useMemo(
+  const badgeMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#38bdf8',
-        emissive: '#0284c7',
-        emissiveIntensity: 1.2,
-        roughness: 0.15,
+        color: '#dc2626',
+        emissive: '#b91c1c',
+        emissiveIntensity: 0.4,
+        roughness: 0.2,
+        metalness: 0.5,
       }),
     []
   );
 
-  const eyeMaterial = useMemo(
+  const paperTalismanMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#0f172a',
-        roughness: 0.2,
+        color: '#ffffff',
+        roughness: 0.25,
+        metalness: 0.02,
       }),
     []
   );
@@ -119,13 +163,13 @@ function RobloxDeveloperAvatar({
       new THREE.MeshBasicMaterial({
         color: '#000000',
         transparent: true,
-        opacity: 0.45,
+        opacity: 0.4,
       }),
     []
   );
 
   // --------------------------------------------------------------------
-  // Interactions: Mouse / Tap Enter -> Angry Walk | Leave -> Instant Normal
+  // Interactions: Mouse / Tap Enter -> Angry Walk | Leave -> Normal
   // --------------------------------------------------------------------
   const handlePointerEnter = (e: any) => {
     e.stopPropagation();
@@ -134,7 +178,6 @@ function RobloxDeveloperAvatar({
     onBehaviorChange('angry_walking', compact ? '😡 Hey!' : '😡 Hey! Don’t touch me!');
 
     walkDir.current = posX.current >= 0 ? -1 : 1;
-    // On compact mobile, stay in place so arms & feet NEVER hit the canvas boundary!
     targetPosX.current = compact ? 0 : walkDir.current * 1.5;
   };
 
@@ -181,16 +224,11 @@ function RobloxDeveloperAvatar({
     if (behaviorRef.current === 'angry_walking') {
       walkClock.current += delta;
 
-      glowMaterial.color.set('#ff2247');
-      glowMaterial.emissive.set('#dc2626');
-      glowMaterial.emissiveIntensity = 1.8;
-
       if (headGroup.current) {
         headGroup.current.rotation.y = Math.sin(t * 24) * 0.28;
         headGroup.current.rotation.z = Math.cos(t * 18) * 0.08;
       }
 
-      // In compact mobile, turn slightly (30 deg) so arms stay perfectly inside frame
       const targetFacing = compact
         ? Math.sin(t * 12) * 0.15
         : walkDir.current > 0
@@ -214,10 +252,6 @@ function RobloxDeveloperAvatar({
 
     // 2. LYING DOWN
     if (behaviorRef.current === 'lying_down') {
-      glowMaterial.color.set('#0ea5e9');
-      glowMaterial.emissive.set('#0369a1');
-      glowMaterial.emissiveIntensity = 0.8;
-
       rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, -Math.PI / 2, 0.1);
       rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, 0, 0.1);
       rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, compact ? -0.85 : -0.65, 0.1);
@@ -231,10 +265,6 @@ function RobloxDeveloperAvatar({
 
     // 3. SITTING
     if (behaviorRef.current === 'sitting') {
-      glowMaterial.color.set('#38bdf8');
-      glowMaterial.emissive.set('#0284c7');
-      glowMaterial.emissiveIntensity = 1.0;
-
       rootRef.current.rotation.x = THREE.MathUtils.lerp(rootRef.current.rotation.x, 0, 0.1);
       rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, -0.25, 0.1);
       rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, compact ? -0.6 : -0.4, 0.1);
@@ -253,10 +283,6 @@ function RobloxDeveloperAvatar({
     }
 
     // 4. NORMAL IDLE
-    glowMaterial.color.set('#38bdf8');
-    glowMaterial.emissive.set('#0284c7');
-    glowMaterial.emissiveIntensity = 1.2;
-
     posX.current = THREE.MathUtils.lerp(posX.current, 0, 0.1);
     rootRef.current.position.x = posX.current;
     rootRef.current.position.y = THREE.MathUtils.lerp(rootRef.current.position.y, compact ? -0.42 : -0.15, 0.1);
@@ -265,15 +291,16 @@ function RobloxDeveloperAvatar({
     if (leftHip.current) leftHip.current.rotation.x = THREE.MathUtils.lerp(leftHip.current.rotation.x, 0, 0.15);
     if (rightHip.current) rightHip.current.rotation.x = THREE.MathUtils.lerp(rightHip.current.rotation.x, 0, 0.15);
 
+    // Subtle pointer tracking
     const targetRotY = (state.pointer.x * Math.PI) / 6 - 0.15;
     rootRef.current.rotation.y = THREE.MathUtils.lerp(rootRef.current.rotation.y, targetRotY, 0.08);
 
     if (leftShoulder.current) {
-      leftShoulder.current.rotation.z = -0.22 + Math.sin(t * 1.8) * 0.03;
+      leftShoulder.current.rotation.z = -0.18 + Math.sin(t * 1.8) * 0.03;
       leftShoulder.current.rotation.x = THREE.MathUtils.lerp(leftShoulder.current.rotation.x, 0, 0.15);
     }
     if (rightShoulder.current) {
-      rightShoulder.current.rotation.z = 0.22 - Math.sin(t * 1.8) * 0.03;
+      rightShoulder.current.rotation.z = 0.18 - Math.sin(t * 1.8) * 0.03;
       rightShoulder.current.rotation.x = THREE.MathUtils.lerp(rightShoulder.current.rotation.x, 0, 0.15);
     }
     if (headGroup.current) {
@@ -293,215 +320,367 @@ function RobloxDeveloperAvatar({
       onPointerDown={handlePointerEnter}
       onPointerUp={handlePointerLeave}
     >
+      {/* Invisible bounding hitbox */}
       <mesh position={[0, 0.7, 0]} visible={false}>
         <boxGeometry args={[2.8, 3.4, 2.0]} />
       </mesh>
 
-      {/* 1. HEAD & FEATURES */}
+      {/* ================================================================ */}
+      {/* 1. HEAD & FEATURES                                               */}
+      {/* ================================================================ */}
       <group ref={headGroup} position={[0, 1.85, 0]}>
+        {/* Head Block */}
         <RoundedBox args={[1.05, 1.05, 1.05]} radius={0.08} smoothness={4} material={skinMaterial} />
 
+        {/* Neck */}
         <mesh position={[0, -0.56, 0]} material={skinMaterial}>
           <cylinderGeometry args={[0.3, 0.3, 0.15, 16]} />
         </mesh>
 
-        <mesh position={[0, 0.22, -0.04]} material={capMaterial}>
-          <boxGeometry args={[1.08, 0.68, 1.12]} />
+        {/* Front Face Texture (Anime > < laughing eyes & open mouth) */}
+        {faceTexture && (
+          <mesh position={[0, 0, 0.53]}>
+            <planeGeometry args={[1.04, 1.04]} />
+            <meshStandardMaterial map={faceTexture} transparent roughness={0.45} />
+          </mesh>
+        )}
+
+        {/* ------------------------------------------------------------- */}
+        {/* Layered Chocolate Brown Anime Hair                             */}
+        {/* ------------------------------------------------------------- */}
+        {/* Main top & side hair volume cap */}
+        <mesh position={[0, 0.28, -0.04]} material={hairMaterial}>
+          <boxGeometry args={[1.14, 0.72, 1.16]} />
         </mesh>
-        <mesh position={[0, -0.08, -0.74]} rotation={[-0.1, 0, 0]} material={capMaterial}>
-          <boxGeometry args={[0.88, 0.07, 0.45]} />
+        <mesh position={[0, 0.52, -0.02]} material={hairHighlightMaterial}>
+          <boxGeometry args={[0.96, 0.28, 0.98]} />
         </mesh>
 
-        {/* Left Earcup */}
-        <group position={[-0.58, 0.05, 0]}>
-          <mesh material={capMaterial}>
-            <cylinderGeometry args={[0.26, 0.26, 0.14, 16]} />
+        {/* Hair Back Layers (reaching down towards nape of neck) */}
+        <mesh position={[0, -0.14, -0.56]} material={hairMaterial}>
+          <boxGeometry args={[1.12, 0.82, 0.22]} />
+        </mesh>
+        <mesh position={[0, -0.38, -0.54]} material={hairHighlightMaterial}>
+          <boxGeometry args={[1.02, 0.44, 0.18]} />
+        </mesh>
+
+        {/* Left Side Hair Locks (framing face) */}
+        <mesh position={[-0.57, 0.02, 0.05]} material={hairMaterial}>
+          <boxGeometry args={[0.18, 0.95, 1.08]} />
+        </mesh>
+        <mesh position={[-0.56, -0.32, 0.26]} rotation={[0.1, 0, 0.08]} material={hairHighlightMaterial}>
+          <boxGeometry args={[0.14, 0.55, 0.35]} />
+        </mesh>
+
+        {/* Right Side Hair Locks (framing face) */}
+        <mesh position={[0.57, 0.02, 0.05]} material={hairMaterial}>
+          <boxGeometry args={[0.18, 0.95, 1.08]} />
+        </mesh>
+        <mesh position={[0.56, -0.32, 0.26]} rotation={[0.1, 0, -0.08]} material={hairHighlightMaterial}>
+          <boxGeometry args={[0.14, 0.55, 0.35]} />
+        </mesh>
+
+        {/* Front Bangs (Anime strands falling over forehead) */}
+        {/* Left Bang */}
+        <mesh position={[-0.32, 0.26, 0.56]} rotation={[0, 0, -0.15]} material={hairMaterial}>
+          <boxGeometry args={[0.38, 0.48, 0.12]} />
+        </mesh>
+        {/* Center Bangs Left */}
+        <mesh position={[-0.1, 0.34, 0.57]} rotation={[0, 0, -0.05]} material={hairHighlightMaterial}>
+          <boxGeometry args={[0.26, 0.42, 0.11]} />
+        </mesh>
+        {/* Center Bangs Right */}
+        <mesh position={[0.14, 0.32, 0.57]} rotation={[0, 0, 0.12]} material={hairMaterial}>
+          <boxGeometry args={[0.28, 0.44, 0.11]} />
+        </mesh>
+        {/* Right Bang */}
+        <mesh position={[0.36, 0.24, 0.56]} rotation={[0, 0, 0.18]} material={hairHighlightMaterial}>
+          <boxGeometry args={[0.36, 0.5, 0.12]} />
+        </mesh>
+
+        {/* Additional tapered tips for messy anime aesthetic */}
+        <mesh position={[-0.42, 0.02, 0.55]} rotation={[0, 0, -0.22]} material={hairMaterial}>
+          <boxGeometry args={[0.16, 0.36, 0.08]} />
+        </mesh>
+        <mesh position={[0.42, 0.02, 0.55]} rotation={[0, 0, 0.22]} material={hairMaterial}>
+          <boxGeometry args={[0.16, 0.36, 0.08]} />
+        </mesh>
+
+        {/* ------------------------------------------------------------- */}
+        {/* 3D Paper Talisman on Forehead ("NOT MY LOVE")                 */}
+        {/* Positioned on front of hair/forehead with realistic 3D depth  */}
+        {/* ------------------------------------------------------------- */}
+        <group position={[0.02, 0.32, 0.62]} rotation={[-0.08, 0.04, 0.08]}>
+          {/* Paper backing */}
+          <mesh material={paperTalismanMaterial}>
+            <boxGeometry args={[0.32, 0.32, 0.015]} />
           </mesh>
-          <mesh position={[-0.08, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={glowMaterial}>
-            <torusGeometry args={[0.18, 0.03, 8, 20]} />
+          {/* Black inner border */}
+          <mesh position={[0, 0, 0.009]}>
+            <planeGeometry args={[0.28, 0.28]} />
+            <meshBasicMaterial color="#0f172a" wireframe wireframeLinewidth={2} />
+          </mesh>
+          {/* Tape on top */}
+          <mesh position={[0, 0.16, 0.012]}>
+            <boxGeometry args={[0.12, 0.045, 0.005]} />
+            <meshStandardMaterial color="#ffffff" transparent opacity={0.8} />
           </mesh>
         </group>
-
-        {/* Right Earcup */}
-        <group position={[0.58, 0.05, 0]}>
-          <mesh material={capMaterial}>
-            <cylinderGeometry args={[0.26, 0.26, 0.14, 16]} />
-          </mesh>
-          <mesh position={[0.08, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={glowMaterial}>
-            <torusGeometry args={[0.18, 0.03, 8, 20]} />
-          </mesh>
-        </group>
-
-        <mesh position={[0, 0.62, 0]} material={capMaterial}>
-          <boxGeometry args={[1.22, 0.08, 0.24]} />
-        </mesh>
-
-        {/* Face */}
-        <mesh position={[-0.22, 0.08, 0.53]} material={eyeMaterial}>
-          <boxGeometry args={[0.14, 0.2, 0.02]} />
-        </mesh>
-        <mesh position={[-0.2, 0.13, 0.54]} material={whiteAccent}>
-          <boxGeometry args={[0.05, 0.05, 0.02]} />
-        </mesh>
-
-        <mesh position={[0.22, 0.08, 0.53]} material={eyeMaterial}>
-          <boxGeometry args={[0.14, 0.2, 0.02]} />
-        </mesh>
-        <mesh position={[0.24, 0.13, 0.54]} material={whiteAccent}>
-          <boxGeometry args={[0.05, 0.05, 0.02]} />
-        </mesh>
-
-        <mesh
-          position={[-0.22, 0.24, 0.53]}
-          rotation={[0, 0, behavior === 'angry_walking' ? -0.35 : 0.05]}
-          material={behavior === 'angry_walking' ? glowMaterial : capMaterial}
-        >
-          <boxGeometry args={[0.18, 0.04, 0.02]} />
-        </mesh>
-        <mesh
-          position={[0.22, 0.24, 0.53]}
-          rotation={[0, 0, behavior === 'angry_walking' ? 0.35 : -0.05]}
-          material={behavior === 'angry_walking' ? glowMaterial : capMaterial}
-        >
-          <boxGeometry args={[0.18, 0.04, 0.02]} />
-        </mesh>
-
-        <mesh position={[0, -0.16, 0.53]} material={eyeMaterial}>
-          <boxGeometry args={[0.22, 0.05, 0.02]} />
-        </mesh>
-
-        <mesh position={[0, 0.08, 0.55]} material={glowMaterial}>
-          <boxGeometry args={[0.88, 0.18, 0.04]} />
-        </mesh>
-        <mesh position={[0, 0.08, 0.54]} material={capMaterial}>
-          <boxGeometry args={[0.94, 0.22, 0.06]} />
-        </mesh>
       </group>
 
-      {/* 2. TORSO */}
+      {/* ================================================================ */}
+      {/* 2. TORSO & T-SHIRT                                               */}
+      {/* ================================================================ */}
       <group ref={torsoGroup} position={[0, 0.65, 0]}>
-        <RoundedBox args={[1.65, 1.65, 0.88]} radius={0.06} smoothness={4} material={hoodieMaterial} />
+        {/* Main Torso Base (White T-shirt) */}
+        <RoundedBox args={[1.65, 1.65, 0.88]} radius={0.06} smoothness={4} material={whiteShirtMaterial} />
 
-        <mesh position={[0, 0.8, 0]} material={whiteAccent}>
-          <boxGeometry args={[1.2, 0.1, 0.7]} />
+        {/* Crew Neckline Ribbing */}
+        <mesh position={[0, 0.82, 0]} material={whiteShirtMaterial}>
+          <boxGeometry args={[1.15, 0.08, 0.68]} />
         </mesh>
 
-        {/* Emblem */}
-        <group position={[0, 0.22, 0.46]}>
-          <mesh rotation={[0, 0, Math.PI / 4]} material={glowMaterial}>
-            <boxGeometry args={[0.34, 0.34, 0.03]} />
+        {/* Front Shirt Face: Pusheen with Glasses & Crossbody Strap */}
+        {shirtFrontTexture && (
+          <mesh position={[0, 0, 0.445]}>
+            <planeGeometry args={[1.64, 1.64]} />
+            <meshStandardMaterial map={shirtFrontTexture} transparent roughness={0.35} />
           </mesh>
-          <mesh rotation={[0, 0, Math.PI / 4]} position={[0, 0, 0.02]} material={hoodieMaterial}>
-            <boxGeometry args={[0.16, 0.16, 0.03]} />
+        )}
+
+        {/* Physical 3D Crossbody Strap overlay across the front */}
+        <mesh position={[0.08, 0.06, 0.455]} rotation={[0, 0, -0.68]} material={strapMaterial}>
+          <boxGeometry args={[2.05, 0.16, 0.025]} />
+        </mesh>
+
+        {/* Strap metallic buckle */}
+        <mesh position={[0.42, -0.32, 0.468]} rotation={[0, 0, -0.68]}>
+          <boxGeometry args={[0.22, 0.18, 0.03]} />
+          <meshStandardMaterial color="#64748b" metalness={0.8} roughness={0.2} />
+        </mesh>
+
+        {/* Physical 3D Crossbody Strap overlay across the back */}
+        <mesh position={[-0.08, 0.06, -0.455]} rotation={[0, 0, 0.68]} material={strapMaterial}>
+          <boxGeometry args={[2.05, 0.16, 0.025]} />
+        </mesh>
+
+        {/* ------------------------------------------------------------- */}
+        {/* BACKPACK: Tan Duffle Messenger Bag with Pusheen & Banknotes   */}
+        {/* ------------------------------------------------------------- */}
+        <group position={[-0.05, 0.12, -0.68]} rotation={[0.04, -0.06, 0.05]}>
+          {/* Main Duffle Body */}
+          <RoundedBox args={[1.18, 0.95, 0.54]} radius={0.12} smoothness={4} material={tanBagMaterial} />
+
+          {/* Bag Piping / Edge Straps */}
+          <mesh position={[-0.38, 0, 0]} material={strapMaterial}>
+            <boxGeometry args={[0.12, 0.96, 0.56]} />
           </mesh>
+          <mesh position={[0.38, 0, 0]} material={strapMaterial}>
+            <boxGeometry args={[0.12, 0.96, 0.56]} />
+          </mesh>
+
+          {/* Top Zipper / Opening Band */}
+          <mesh position={[0, 0.46, 0]}>
+            <boxGeometry args={[1.12, 0.06, 0.48]} />
+            <meshStandardMaterial color="#786655" roughness={0.4} />
+          </mesh>
+
+          {/* Top Carry Handles */}
+          <group position={[0, 0.56, 0]}>
+            <mesh material={strapMaterial}>
+              <boxGeometry args={[0.5, 0.14, 0.08]} />
+            </mesh>
+          </group>
+
+          {/* Rear Face of Bag: Pusheen Eating Strawberry Donut! */}
+          {backpackTexture && (
+            <mesh position={[0, 0, -0.275]} rotation={[0, Math.PI, 0]}>
+              <planeGeometry args={[1.16, 0.93]} />
+              <meshStandardMaterial map={backpackTexture} roughness={0.45} />
+            </mesh>
+          )}
+
+          {/* Round Pin / Badge on the strap */}
+          <mesh position={[-0.38, 0.32, -0.29]} rotation={[0, Math.PI, 0]} material={badgeMaterial}>
+            <cylinderGeometry args={[0.07, 0.07, 0.02, 16]} />
+          </mesh>
+
+          {/* ----------------------------------------------------------- */}
+          {/* Banknotes / Currency Notes sticking out of top zipper       */}
+          {/* ----------------------------------------------------------- */}
+          <group position={[0, 0.48, 0]}>
+            {/* Note 1 (Left tilted) */}
+            <mesh position={[-0.32, 0.12, -0.05]} rotation={[-0.15, 0.1, 0.22]}>
+              <planeGeometry args={[0.26, 0.38]} />
+              <meshStandardMaterial
+                map={cashTexture ?? undefined}
+                color={cashTexture ? undefined : '#a7f3d0'}
+                roughness={0.3}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+
+            {/* Note 2 (Center Left) */}
+            <mesh position={[-0.12, 0.18, 0.02]} rotation={[-0.12, -0.05, 0.08]}>
+              <planeGeometry args={[0.26, 0.42]} />
+              <meshStandardMaterial
+                map={cashTexture ?? undefined}
+                color={cashTexture ? undefined : '#a7f3d0'}
+                roughness={0.3}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+
+            {/* Note 3 (Center Right) */}
+            <mesh position={[0.12, 0.22, -0.02]} rotation={[-0.08, 0.08, -0.12]}>
+              <planeGeometry args={[0.26, 0.45]} />
+              <meshStandardMaterial
+                map={cashTexture ?? undefined}
+                color={cashTexture ? undefined : '#a7f3d0'}
+                roughness={0.3}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+
+            {/* Note 4 (Right tilted) */}
+            <mesh position={[0.32, 0.14, 0.04]} rotation={[-0.14, -0.1, -0.2]}>
+              <planeGeometry args={[0.26, 0.38]} />
+              <meshStandardMaterial
+                map={cashTexture ?? undefined}
+                color={cashTexture ? undefined : '#a7f3d0'}
+                roughness={0.3}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+          </group>
         </group>
-
-        {/* Drawstrings */}
-        <mesh position={[-0.22, 0.18, 0.47]} material={whiteAccent}>
-          <boxGeometry args={[0.035, 0.45, 0.02]} />
-        </mesh>
-        <mesh position={[-0.22, -0.05, 0.48]} material={glowMaterial}>
-          <cylinderGeometry args={[0.025, 0.025, 0.08, 8]} />
-        </mesh>
-
-        <mesh position={[0.22, 0.18, 0.47]} material={whiteAccent}>
-          <boxGeometry args={[0.035, 0.45, 0.02]} />
-        </mesh>
-        <mesh position={[0.22, -0.05, 0.48]} material={glowMaterial}>
-          <cylinderGeometry args={[0.025, 0.025, 0.08, 8]} />
-        </mesh>
-
-        <mesh position={[0, -0.32, 0.46]} material={pantsMaterial}>
-          <boxGeometry args={[1.1, 0.42, 0.04]} />
-        </mesh>
-
-        <mesh position={[0, -0.76, 0]} material={whiteAccent}>
-          <boxGeometry args={[1.68, 0.14, 0.9]} />
-        </mesh>
       </group>
 
-      {/* 3. LEFT ARM */}
+      {/* ================================================================ */}
+      {/* 3. LEFT ARM (Short Sleeve White Shirt + Bare Skin)               */}
+      {/* ================================================================ */}
       <group ref={leftShoulder} position={[-1.24, 1.35, 0]}>
-        <mesh position={[0, -0.5, 0]}>
-          <RoundedBox args={[0.74, 1.05, 0.86]} radius={0.06} smoothness={4} material={hoodieMaterial} />
+        {/* Upper White T-Shirt Sleeve */}
+        <mesh position={[0, -0.22, 0]}>
+          <RoundedBox args={[0.74, 0.46, 0.86]} radius={0.05} smoothness={4} material={whiteShirtMaterial} />
         </mesh>
-        <mesh position={[0, -0.22, 0]} material={whiteAccent}>
+        {/* Sleeve Cuff Hem */}
+        <mesh position={[0, -0.45, 0]} material={whiteShirtMaterial}>
           <boxGeometry args={[0.76, 0.08, 0.88]} />
         </mesh>
-        <mesh position={[0, -0.36, 0]} material={whiteAccent}>
-          <boxGeometry args={[0.76, 0.08, 0.88]} />
-        </mesh>
-        <mesh position={[0, -1.02, 0]} material={whiteAccent}>
-          <boxGeometry args={[0.76, 0.12, 0.88]} />
-        </mesh>
-        <mesh position={[0, -1.28, 0]}>
-          <RoundedBox args={[0.68, 0.44, 0.78]} radius={0.05} smoothness={4} material={skinMaterial} />
-        </mesh>
-        <mesh position={[-0.35, -1.2, 0]} material={glowMaterial}>
-          <boxGeometry args={[0.04, 0.14, 0.22]} />
+
+        {/* Lower Arm (Bare Skin) */}
+        <mesh position={[0, -0.92, 0]}>
+          <RoundedBox args={[0.72, 0.86, 0.84]} radius={0.05} smoothness={4} material={skinMaterial} />
         </mesh>
       </group>
 
-      {/* 4. RIGHT ARM */}
+      {/* ================================================================ */}
+      {/* 4. RIGHT ARM (Short Sleeve White Shirt + Bare Skin)              */}
+      {/* ================================================================ */}
       <group ref={rightShoulder} position={[1.24, 1.35, 0]}>
-        <mesh position={[0, -0.5, 0]}>
-          <RoundedBox args={[0.74, 1.05, 0.86]} radius={0.06} smoothness={4} material={hoodieMaterial} />
+        {/* Upper White T-Shirt Sleeve */}
+        <mesh position={[0, -0.22, 0]}>
+          <RoundedBox args={[0.74, 0.46, 0.86]} radius={0.05} smoothness={4} material={whiteShirtMaterial} />
         </mesh>
-        <mesh position={[0, -0.22, 0]} material={whiteAccent}>
+        {/* Sleeve Cuff Hem */}
+        <mesh position={[0, -0.45, 0]} material={whiteShirtMaterial}>
           <boxGeometry args={[0.76, 0.08, 0.88]} />
         </mesh>
-        <mesh position={[0, -0.36, 0]} material={whiteAccent}>
-          <boxGeometry args={[0.76, 0.08, 0.88]} />
-        </mesh>
-        <mesh position={[0, -1.02, 0]} material={whiteAccent}>
-          <boxGeometry args={[0.76, 0.12, 0.88]} />
-        </mesh>
-        <mesh position={[0, -1.28, 0]}>
-          <RoundedBox args={[0.68, 0.44, 0.78]} radius={0.05} smoothness={4} material={skinMaterial} />
+
+        {/* Lower Arm (Bare Skin) */}
+        <mesh position={[0, -0.92, 0]}>
+          <RoundedBox args={[0.72, 0.86, 0.84]} radius={0.05} smoothness={4} material={skinMaterial} />
         </mesh>
       </group>
 
-      {/* 5. LEFT LEG */}
+      {/* ================================================================ */}
+      {/* 5. LEFT LEG (White Baggy Cargo Pants with Pockets & Cuffs)       */}
+      {/* ================================================================ */}
       <group ref={leftHip} position={[-0.43, -0.18, 0]}>
+        {/* Main Leg Block */}
         <mesh position={[0, -0.65, 0]}>
-          <RoundedBox args={[0.74, 1.3, 0.86]} radius={0.06} smoothness={4} material={pantsMaterial} />
+          <RoundedBox args={[0.74, 1.3, 0.86]} radius={0.06} smoothness={4} material={whitePantsMaterial} />
         </mesh>
-        <mesh position={[-0.38, -0.55, 0]} material={hoodieMaterial}>
-          <boxGeometry args={[0.06, 0.45, 0.5]} />
+
+        {/* Outer Flap Cargo Pocket (Left Leg) */}
+        <mesh position={[-0.39, -0.5, 0]} material={whitePantsMaterial}>
+          <boxGeometry args={[0.07, 0.48, 0.46]} />
         </mesh>
-        <mesh position={[0, -1.35, 0.06]} material={capMaterial}>
-          <boxGeometry args={[0.76, 0.28, 0.98]} />
+        {/* Flap */}
+        <mesh position={[-0.4, -0.26, 0]} material={whiteShirtMaterial}>
+          <boxGeometry args={[0.08, 0.12, 0.48]} />
         </mesh>
-        <mesh position={[0, -1.35, 0.56]} material={glowMaterial}>
-          <boxGeometry args={[0.5, 0.06, 0.02]} />
+
+        {/* Front / Back Pants Texture Accent */}
+        {pantsTexture && (
+          <mesh position={[0, -0.65, 0.435]}>
+            <planeGeometry args={[0.72, 1.28]} />
+            <meshStandardMaterial map={pantsTexture} transparent roughness={0.45} />
+          </mesh>
+        )}
+
+        {/* Rolled Bottom Pant Cuff */}
+        <mesh position={[0, -1.24, 0]} material={whiteShirtMaterial}>
+          <boxGeometry args={[0.78, 0.14, 0.9]} />
         </mesh>
-        <mesh position={[0, -1.52, 0.08]} material={whiteAccent}>
-          <boxGeometry args={[0.78, 0.12, 1.04]} />
+
+        {/* White Sneaker / Shoe Bottom */}
+        <mesh position={[0, -1.36, 0.04]} material={whiteShirtMaterial}>
+          <boxGeometry args={[0.76, 0.12, 0.96]} />
+        </mesh>
+        <mesh position={[0, -1.44, 0.04]}>
+          <boxGeometry args={[0.78, 0.04, 0.98]} />
+          <meshStandardMaterial color="#cbd5e1" roughness={0.6} />
         </mesh>
       </group>
 
-      {/* 6. RIGHT LEG */}
+      {/* ================================================================ */}
+      {/* 6. RIGHT LEG (White Baggy Cargo Pants with Pockets & Cuffs)      */}
+      {/* ================================================================ */}
       <group ref={rightHip} position={[0.43, -0.18, 0]}>
+        {/* Main Leg Block */}
         <mesh position={[0, -0.65, 0]}>
-          <RoundedBox args={[0.74, 1.3, 0.86]} radius={0.06} smoothness={4} material={pantsMaterial} />
+          <RoundedBox args={[0.74, 1.3, 0.86]} radius={0.06} smoothness={4} material={whitePantsMaterial} />
         </mesh>
-        <mesh position={[0.38, -0.55, 0]} material={hoodieMaterial}>
-          <boxGeometry args={[0.06, 0.45, 0.5]} />
+
+        {/* Outer Flap Cargo Pocket (Right Leg) */}
+        <mesh position={[0.39, -0.5, 0]} material={whitePantsMaterial}>
+          <boxGeometry args={[0.07, 0.48, 0.46]} />
         </mesh>
-        <mesh position={[0, -1.35, 0.06]} material={capMaterial}>
-          <boxGeometry args={[0.76, 0.28, 0.98]} />
+        {/* Flap */}
+        <mesh position={[0.4, -0.26, 0]} material={whiteShirtMaterial}>
+          <boxGeometry args={[0.08, 0.12, 0.48]} />
         </mesh>
-        <mesh position={[0, -1.35, 0.56]} material={glowMaterial}>
-          <boxGeometry args={[0.5, 0.06, 0.02]} />
+
+        {/* Front / Back Pants Texture Accent */}
+        {pantsTexture && (
+          <mesh position={[0, -0.65, 0.435]}>
+            <planeGeometry args={[0.72, 1.28]} />
+            <meshStandardMaterial map={pantsTexture} transparent roughness={0.45} />
+          </mesh>
+        )}
+
+        {/* Rolled Bottom Pant Cuff */}
+        <mesh position={[0, -1.24, 0]} material={whiteShirtMaterial}>
+          <boxGeometry args={[0.78, 0.14, 0.9]} />
         </mesh>
-        <mesh position={[0, -1.52, 0.08]} material={whiteAccent}>
-          <boxGeometry args={[0.78, 0.12, 1.04]} />
+
+        {/* White Sneaker / Shoe Bottom */}
+        <mesh position={[0, -1.36, 0.04]} material={whiteShirtMaterial}>
+          <boxGeometry args={[0.76, 0.12, 0.96]} />
+        </mesh>
+        <mesh position={[0, -1.44, 0.04]}>
+          <boxGeometry args={[0.78, 0.04, 0.98]} />
+          <meshStandardMaterial color="#cbd5e1" roughness={0.6} />
         </mesh>
       </group>
 
-      {/* 7. GROUND SHADOW */}
-      <mesh position={[0, -1.6, 0]} rotation={[-Math.PI / 2, 0, 0]} material={shadowMaterial}>
-        <circleGeometry args={[1.1, 32]} />
+      {/* ================================================================ */}
+      {/* 7. GROUND SHADOW                                                 */}
+      {/* ================================================================ */}
+      <mesh position={[0, -1.5, 0]} rotation={[-Math.PI / 2, 0, 0]} material={shadowMaterial}>
+        <circleGeometry args={[1.15, 32]} />
       </mesh>
     </group>
   );
@@ -563,18 +742,18 @@ export default function Hero3DCanvas({ compact = false }: { compact?: boolean })
         </div>
       </div>
 
-      {/* 3D Canvas with safe camera framing - Arms and Feet NEVER clip! */}
+      {/* 3D Canvas with authentic studio lighting */}
       <Canvas
         camera={{ position: [0, compact ? 0.05 : 0.1, compact ? 5.6 : 5.4], fov: compact ? 42 : 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
         style={{ touchAction: 'pan-y' }}
       >
-        <ambientLight intensity={1.8} color="#e2e8f0" />
-        <directionalLight position={[5, 6, 5]} intensity={3.0} color="#ffffff" />
-        <directionalLight position={[-5, 4, 4]} intensity={2.2} color="#bae6fd" />
-        <directionalLight position={[0, 5, -5]} intensity={4.5} color="#38bdf8" />
-        <directionalLight position={[0, -4, 3]} intensity={1.2} color="#ffffff" />
+        <ambientLight intensity={1.9} color="#ffffff" />
+        <directionalLight position={[5, 6, 5]} intensity={2.6} color="#ffffff" />
+        <directionalLight position={[-5, 4, 4]} intensity={1.8} color="#f8fafc" />
+        <directionalLight position={[0, 5, -5]} intensity={2.8} color="#e0f2fe" />
+        <directionalLight position={[0, -4, 3]} intensity={1.0} color="#ffffff" />
 
         <RobloxDeveloperAvatar
           scrollOffset={scrollOffset}

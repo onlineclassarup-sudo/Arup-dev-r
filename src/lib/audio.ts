@@ -163,6 +163,18 @@ class SoundFXEngine {
       // Audio autoplay policy catch
     }
   }
+
+  public playGrab() {
+    this.playHover();
+  }
+
+  public playAngry() {
+    this.playClick();
+  }
+
+  public playDrop() {
+    this.playClick();
+  }
 }
 
 export const soundFx = new SoundFXEngine();
