@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, MessageSquare, Copy, Check, Send, CheckCircle } from 'lucide-react';
+import { Mail, MessageSquare, Copy, Check, Send, CheckCircle, Loader2 } from 'lucide-react';
 import { DEVELOPER_INFO } from '@/lib/constants';
 import { copyToClipboard } from '@/lib/utils';
 import { soundFx } from '@/lib/audio';
@@ -16,6 +16,7 @@ export default function TerminalContact() {
   const [contactHandle, setContactHandle] = useState('');
   const [inquiryType, setInquiryType] = useState('Buying a system');
   const [messageBody, setMessageBody] = useState('');
+  const [isSending, setIsSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleCopyDiscord = async () => {
@@ -38,20 +39,48 @@ export default function TerminalContact() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    soundFx.playSuccess();
-    setSubmitted(true);
-    showToast('Message Ready', 'Opening your email client to send message', 'success');
+    if (isSending) return;
 
-    const subject = encodeURIComponent(`[Roblox Portfolio] ${inquiryType} - ${senderName}`);
-    const body = encodeURIComponent(
-      `Name: ${senderName}\nContact Handle: ${contactHandle}\nTopic: ${inquiryType}\n\nMessage:\n${messageBody}\n\nSent via Arup's Developer Portfolio.`
-    );
+    setIsSending(true);
+    soundFx.playClick();
 
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'contact',
+          name: senderName,
+          contact: contactHandle,
+          topic: inquiryType,
+          message: messageBody,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        soundFx.playSuccess();
+        setSubmitted(true);
+        showToast('Message Sent!', 'Your message was delivered to Arup’s inbox.', 'success');
+      } else {
+        throw new Error(data.error || 'Failed to deliver message');
+      }
+    } catch (err: any) {
+      console.error('Contact send error:', err);
+      // Client fallback to mailto if network completely fails
+      showToast('Opening Mail App', 'Falling back to direct email client...', 'info');
+      const subject = encodeURIComponent(`[Roblox Portfolio] ${inquiryType} - ${senderName}`);
+      const body = encodeURIComponent(
+        `Name: ${senderName}\nContact: ${contactHandle}\nTopic: ${inquiryType}\n\nMessage:\n${messageBody}`
+      );
       window.location.href = `mailto:${DEVELOPER_INFO.email}?subject=${subject}&body=${body}`;
-    }, 600);
+      setSubmitted(true);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -67,89 +96,83 @@ export default function TerminalContact() {
               Let&apos;s build something.
             </h2>
             <p className="text-xs sm:text-sm text-gray-400 font-sans max-w-lg leading-relaxed">
-              Want one of my systems, a custom build, or a perm dev for your game? Send a message below, DM me on Discord, or email me.
+              Want one of my systems, a custom build, or a perm dev for your game? Send a message below, DM me on Discord, or email me directly at <span className="text-white font-mono">{DEVELOPER_INFO.email}</span>.
             </p>
           </div>
 
           {/* Right side contact badges */}
           <div className="lg:col-span-5 space-y-2.5">
-            {/* Email pill box */}
-            <div className="p-3 rounded-xl bg-[#121318] border border-white/[0.07] flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="p-2 rounded-lg bg-white/[0.04] text-gray-300 shrink-0">
-                  <Mail className="w-4 h-4" />
+            {/* Email quick-copy badge */}
+            <div className="p-3 sm:p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                  <Mail className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[10px] font-mono text-gray-500 uppercase">Email</div>
-                  <div className="text-xs font-mono font-semibold text-white truncate">
+                  <div className="text-[10px] font-mono uppercase text-gray-400">Direct Gmail</div>
+                  <div className="text-xs sm:text-sm font-mono text-white truncate">
                     {DEVELOPER_INFO.email}
                   </div>
                 </div>
               </div>
-
               <button
                 onClick={handleCopyEmail}
                 onMouseEnter={() => soundFx.playHover()}
-                className="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono text-gray-300 hover:text-white transition-colors flex items-center gap-1 shrink-0"
+                className="px-2.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono text-gray-300 transition-colors flex items-center gap-1.5 shrink-0"
               >
-                {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedEmail ? 'Copied' : 'Copy'}</span>
+                {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-gray-400" />}
+                <span className="hidden sm:inline">{copiedEmail ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
 
-            {/* Discord pill box */}
-            <div className="p-3 rounded-xl bg-[#121318] border border-white/[0.07] flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="p-2 rounded-lg bg-white/[0.04] text-gray-300 shrink-0">
-                  <MessageSquare className="w-4 h-4" />
+            {/* Discord quick-copy badge */}
+            <div className="p-3 sm:p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#5865F2]/10 border border-[#5865F2]/20 flex items-center justify-center shrink-0">
+                  <MessageSquare className="w-4 h-4 text-[#5865F2]" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[10px] font-mono text-gray-500 uppercase">Discord</div>
-                  <div className="text-xs font-mono font-semibold text-white truncate">
+                  <div className="text-[10px] font-mono uppercase text-gray-400">Discord Handle</div>
+                  <div className="text-xs sm:text-sm font-mono text-white truncate">
                     {DEVELOPER_INFO.discord}
                   </div>
                 </div>
               </div>
-
               <button
                 onClick={handleCopyDiscord}
                 onMouseEnter={() => soundFx.playHover()}
-                className="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono text-gray-300 hover:text-white transition-colors flex items-center gap-1 shrink-0"
+                className="px-2.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono text-gray-300 transition-colors flex items-center gap-1.5 shrink-0"
               >
-                {copiedDiscord ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedDiscord ? 'Copied' : 'Copy'}</span>
+                {copiedDiscord ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-gray-400" />}
+                <span className="hidden sm:inline">{copiedDiscord ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Send me a message full-width card */}
-        <div className="p-5 sm:p-8 rounded-2xl bg-[#121318] border border-white/[0.07]">
-          <div className="mb-5 sm:mb-6">
-            <h3 className="text-base sm:text-lg font-bold text-white mb-1">
-              Send me a message
-            </h3>
-            <p className="text-xs text-gray-400">
-              Write it here and it comes straight to me. Leave your Discord or email so I can reply.
-            </p>
-          </div>
-
+        {/* Message Form / Terminal */}
+        <div className="max-w-3xl rounded-2xl bg-white/[0.02] border border-white/[0.08] p-5 sm:p-8">
           {submitted ? (
-            <div className="py-8 sm:py-10 text-center space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.06] text-emerald-400 flex items-center justify-center mx-auto">
-                <CheckCircle className="w-5 h-5" />
+            <div className="py-8 sm:py-12 text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                <CheckCircle className="w-6 h-6" />
               </div>
-              <h4 className="text-sm font-bold text-white">
-                Message Dispatched
-              </h4>
-              <p className="text-xs text-gray-400">
-                You can also DM directly on Discord: <span className="text-white font-mono">{DEVELOPER_INFO.discord}</span>
+              <h3 className="text-lg sm:text-xl font-bold text-white">Message Delivered to Arup!</h3>
+              <p className="text-xs sm:text-sm text-gray-400 max-w-md mx-auto">
+                Your message was sent directly to <strong className="text-white font-mono">{DEVELOPER_INFO.email}</strong>. I usually reply within a few hours on your provided contact!
               </p>
+              <div className="text-[11px] font-mono text-gray-500 pt-1">
+                You can also DM directly on Discord: <span className="text-white font-mono">{DEVELOPER_INFO.discord}</span>
+              </div>
               <button
-                onClick={() => setSubmitted(false)}
-                className="text-xs font-mono text-gray-400 hover:text-white pt-2"
+                onClick={() => {
+                  soundFx.playClick();
+                  setSubmitted(false);
+                  setMessageBody('');
+                }}
+                className="text-xs font-mono text-gray-400 hover:text-white pt-2 transition-colors"
               >
-                Send another message
+                ← Send another message
               </button>
             </div>
           ) : (
@@ -214,15 +237,28 @@ export default function TerminalContact() {
                 />
               </div>
 
-              <div className="pt-2">
+              <div className="pt-2 flex items-center justify-between flex-wrap gap-3">
                 <button
                   type="submit"
+                  disabled={isSending}
                   onMouseEnter={() => soundFx.playHover()}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-semibold text-black bg-white hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-98"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-semibold text-black bg-white hover:bg-gray-100 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-98"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Send message</span>
+                  {isSending ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Sending to Arup...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Send message</span>
+                    </>
+                  )}
                 </button>
+                <div className="text-[11px] font-mono text-gray-500">
+                  Delivers instantly to <span className="text-gray-400">{DEVELOPER_INFO.email}</span>
+                </div>
               </div>
             </form>
           )}
