@@ -112,6 +112,28 @@ export default function StoreSection() {
       priceAlt: 'or 2,000 BDT with bKash · about $15 USD',
       tags: ['3D Models', 'Rigging', 'Physics', 'Pets'],
     },
+    {
+      id: 'phone-model',
+      assetRef: STORE_ASSETS[3],
+      tag: 'ROBLOX 3D MODEL & SYSTEM',
+      status: 'New',
+      title: 'PHONE MODEL SYSTEM',
+      gradient: 'from-blue-950 via-[#0e1c38] to-[#121318]',
+      accentColor: 'text-blue-400',
+      buttonBg: 'bg-blue-400 text-black hover:bg-blue-300',
+      description: 'High-detail 3D smartphone model with interactive on-screen UI, smooth equip animations, camera tool, and custom apps built for roleplay and hangout games.',
+      bulletsCol1: [
+        { label: '3D Mesh & Rigging', desc: 'Optimized modern smartphone with hand-holding animations for R6/R15.' },
+        { label: 'Interactive UI', desc: 'Touchscreen OS with camera, music, settings, and messaging apps.' },
+      ],
+      bulletsCol2: [
+        { label: 'Sound FX & Haptics', desc: 'Custom tap clicks, camera shutter, and ringtone audio replication.' },
+        { label: 'Custom Wallpapers', desc: 'Player personalization with persistent wallpaper save via DataStore.' },
+      ],
+      priceRobux: '4,000 Robux',
+      priceAlt: 'or 4,000 BDT with bKash · about $30 USD',
+      tags: ['3D Models', 'Phone UI', 'Roleplay', 'Interactive'],
+    },
   ];
 
   const clientReviews = [
@@ -212,7 +234,7 @@ export default function StoreSection() {
         <div className="p-5 sm:p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-[#181a24] to-[#121318] border border-white/[0.08] mb-6 sm:mb-8 relative overflow-hidden">
           <div className="flex items-center gap-2 text-xs font-mono text-gray-400 mb-2">
             <Package className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-            <span className="truncate">ROBLOX PACKAGE · 3 SYSTEMS</span>
+            <span className="truncate">ROBLOX PACKAGE · 4 SYSTEMS</span>
             <span className="px-2 py-0.5 rounded-full bg-white/[0.08] text-[10px] text-white shrink-0">New</span>
           </div>
           <h3 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">

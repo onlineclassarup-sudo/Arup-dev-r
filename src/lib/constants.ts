@@ -290,6 +290,38 @@ export const STORE_ASSETS: StoreAsset[] = [
     previewImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop',
     discordInquiryText: 'Hi Arup! Interested in buying Customizable Overhead with Head Tag System (2,500 Robux / 2,500 BDT / 20 USDT). Ready to purchase!',
   },
+  {
+    id: 'phone-model-system',
+    title: 'Phone Model System',
+    category: '3D Models',
+    badge: '3D Model & Interactive UI',
+    prices: {
+      robux: '4,000 R$',
+      bdt: '4,000 BDT (bKash)',
+      usdt: '30 USDT',
+    },
+    summary: 'High-detail 3D smartphone model with interactive on-screen UI, smooth equip animations, camera tool, and custom apps.',
+    description: 'A comprehensive, high-quality 3D smartphone framework engineered for Roblox roleplay, hangout, and modern city experiences. Includes custom 3D phone mesh, smooth hand-holding and texting animations, interactive touchscreen interface, camera photo tool, ringtone sound effects, and wallpaper customization with DataStore persistence.',
+    features: [
+      'High-detail optimized 3D phone mesh with realistic metallic and glass shaders',
+      'Smooth equip, idle, and phone texting character animations for R6 and R15',
+      'Interactive touchscreen OS with functional apps (Camera, Music, Messages, Settings)',
+      'Camera tool allowing in-game photography with custom screen HUD and photo capture',
+      'Configurable ringtones, tap sound effects, and notification audio replication',
+      'Custom wallpaper selection with automatic player data saving',
+    ],
+    deliverables: [
+      '.rbxm Model File with ready-to-drag scripts and Tool',
+      'Configurable PhoneSettings ModuleScript',
+      'Step-by-step setup documentation & video walkthrough link',
+      'Direct developer assistance via Discord',
+    ],
+    compatibility: 'Roblox Studio (R6 & R15), Mobile, PC & Console ready',
+    rating: 5.0,
+    reviewsCount: 31,
+    previewImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000&auto=format&fit=crop',
+    discordInquiryText: 'Hi Arup! Interested in buying Phone Model System (4,000 Robux / 4,000 BDT / 30 USDT). Please send me payment details!',
+  },
 ];
 
 export const TECH_SKILLS: TechSkill[] = [
