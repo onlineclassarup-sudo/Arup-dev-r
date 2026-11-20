@@ -157,6 +157,40 @@ export const INITIAL_GAMES: RobloxGame[] = [
       updated: '2026-11-09',
     },
   },
+  {
+    placeId: '94669242623537',
+    universeId: 10765204937,
+    slug: 'bangla-plaza',
+    title: 'BANGLA PLAZA',
+    officialTitle: 'BANGLA PLAZA',
+    role: 'Developer',
+    category: 'Bengali Community & Hangout Plaza',
+    genre: 'Social Experience',
+    url: 'https://www.roblox.com/games/94669242623537/BANGLA-PLAZA',
+    thumbnail: 'https://tr.rbxcdn.com/180DAY-980ef4b4b4639b6cfe29a484e537e847/768/432/GameMediaItem6/Png/noFilter',
+    fallbackThumbnail: 'https://images.unsplash.com/photo-1546768292-fb12f6c92568?q=80&w=1200&auto=format&fit=crop',
+    description: 'An expansive community hub and social plaza engineered for the Bengali Roblox community, featuring interactive lounge zones, custom animations, stage performances, and low-latency multiplayer networking.',
+    highlights: [
+      'Interactive community hub designed for high-density multiplayer hangout',
+      'Custom character interaction systems, emote zones, and lounge physics',
+      'Optimized Future is Bright (FIB) lighting with vibrant neon aesthetics',
+      'Advanced server-side replication and network bandwidth optimization',
+    ],
+    features: [
+      'Multi-zone social plaza with dance stage and private lounges',
+      'Custom overhead group rank display and localized nametag system',
+      'Dynamic spatial audio integration with ambient sound staging',
+      'Fully responsive UI tailored for mobile, PC, and console players',
+    ],
+    techStack: ['Luau', 'Spatial Audio', 'Future Lighting', 'Social Physics', 'Memory Profiler', 'Custom UI'],
+    stats: {
+      playing: 2,
+      visits: 3434,
+      favoritedCount: 3,
+      maxPlayers: 50,
+      updated: '2026-11-20',
+    },
+  },
 ];
 
 export const STORE_ASSETS: StoreAsset[] = [

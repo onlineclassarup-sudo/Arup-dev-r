@@ -13,7 +13,7 @@ export default function TimelineSection() {
     },
     {
       year: 'LIVE EXP',
-      title: 'Developer on Sylhety Vibes, LAXUIRES PARK, Lumina Hangout & Last Fade',
+      title: 'Developer on BANGLA PLAZA, Sylhety Vibes, LAXUIRES PARK, Lumina Hangout & Last Fade',
       description: 'Joined active games as a lead developer & systems architect, engineering custom physics and server architecture.',
       active: false,
     },

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     'Luau Scripting',
     'Roblox Portfolio',
     'Roblox Systems Architect',
+    'BANGLA PLAZA',
     'Sylhety Vibes',
     'LAXUIRES PARK',
     'Lumina Hangout',

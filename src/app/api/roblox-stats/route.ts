@@ -39,6 +39,7 @@ export async function GET() {
   try {
     // 1. Map place IDs to known/resolved Universe IDs
     const placeUniverseMap: Record<string, number> = {
+      '94669242623537': 10765204937,
       '123399988849577': 10775086909,
       '127593511292442': 10773759185,
       '134884285482428': 10771061328,

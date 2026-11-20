@@ -185,7 +185,7 @@ export default function StoreSection() {
                 Perm dev
               </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Join your game as a permanent developer: scripting, systems, UI and ongoing updates, like I&apos;ve done for Sylhety Vibes and LAXUIRES PARK.
+                Join your game as a permanent developer: scripting, systems, UI and ongoing updates, like I&apos;ve done for BANGLA PLAZA, Sylhety Vibes and LAXUIRES PARK.
               </p>
             </div>
           </div>
